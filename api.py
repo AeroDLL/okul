@@ -5,7 +5,7 @@ from huggingface_hub import InferenceClient
 
 # --- AYARLAR ---
 # 1. Adım: Hugging Face Token'ını buraya yapıştır
-HF_TOKEN = "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"
+HF_TOKEN = os.environ.get('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')
 MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.2"
 
 # 2. Adım: API istemcisini başlat
@@ -69,4 +69,5 @@ def handle_mesaj():
     return jsonify({"cevap": ai_cevabi})
        
 if __name__ == '__main__':
+
     app.run(debug=True, port=5000)
