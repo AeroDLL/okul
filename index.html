@@ -6,41 +6,87 @@
     <title>Dijital Aile Danışmanı</title>
     <style>
         /* --- TEMEL ARAYÜZ STİLLERİ --- */
+        :root {
+            /* Açık Mod Renkleri (Varsayılan) */
+            --bg-color: #f4f7f6;
+            --container-bg: #ffffff;
+            --text-color: #333;
+            --header-bg: #007bff;
+            --header-text: #ffffff;
+            --user-msg-bg: #007bff;
+            --user-msg-text: #ffffff;
+            --bot-msg-bg: #e9ecef;
+            --bot-msg-text: #333;
+            --input-area-bg: #f9f9f9;
+            --input-border: #ccc;
+            --button-bg: #007bff;
+            --button-text: #ffffff;
+            --button-hover: #0056b3;
+            --disabled-button: #aaa;
+            --link-color: #007bff;
+            --footer-text: #888;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --popup-header-bg: #007bff;
+            --popup-header-text: #ffffff;
+            --popup-bg: #ffffff;
+            --popup-border: #ddd;
+            --popup-shadow: rgba(0,0,0,0.15);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #f4f7f6;
+            background-color: var(--bg-color); /* Değişkeni kullan */
+            color: var(--text-color); /* Değişkeni kullan */
             margin: 0;
-            padding: 20px 0; /* Sayfanın tamamı için biraz boşluk */
+            padding: 20px 0;
             display: flex;
-            flex-direction: column; /* Dikey hizalama için */
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Tüm yüksekliği kaplamasını sağla */
-            box-sizing: border-box; /* Padding'i dahil et */
+            min-height: 100vh;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s; /* Geçiş efekti */
         }
         #chat-container {
             width: 90%;
             max-width: 600px;
-            height: 80vh; /* Yüksekliği biraz azalttık, footer için yer kalsın */
-            max-height: 700px; /* Çok uzun ekranlarda aşırı büyümesin */
-            background-color: #ffffff;
+            height: 80vh;
+            max-height: 700px;
+            background-color: var(--container-bg); /* Değişkeni kullan */
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px var(--shadow-color); /* Değişkeni kullan */
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            margin-bottom: 20px; /* Footer ile arasında boşluk */
+            margin-bottom: 20px;
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
         #header {
-            padding: 15px 20px; /* Biraz daha kompakt */
-            background: #007bff;
-            color: white;
+            padding: 15px 20px;
+            background: var(--header-bg); /* Değişkeni kullan */
+            color: var(--header-text); /* Değişkeni kullan */
             text-align: center;
-            border-bottom: 1px solid #ddd;
-            flex-shrink: 0; /* Header küçülmesin */
+            border-bottom: 1px solid var(--popup-border);
+            flex-shrink: 0;
+            display: flex; /* Buton için */
+            justify-content: space-between; /* Buton için */
+            align-items: center; /* Buton için */
+            transition: background-color 0.3s;
         }
-        #header h3 { margin: 0; font-size: 1.1em; }
-        #header p { margin: 5px 0 0; font-size: 0.8em; opacity: 0.9;}
+        #header-title h3 { margin: 0; font-size: 1.1em; }
+        #header-title p { margin: 5px 0 0; font-size: 0.8em; opacity: 0.9;}
+
+        /* --- YENİ: Karanlık Mod Butonu Stili --- */
+        #theme-toggle {
+            background: none;
+            border: none;
+            color: var(--header-text);
+            font-size: 1.5em; /* İkon boyutu */
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1; /* Dikey hizalama için */
+        }
+        /* ------------------------------------- */
 
         #messages {
             flex-grow: 1;
@@ -51,62 +97,73 @@
             gap: 15px;
         }
         .message {
-            padding: 10px 15px; /* Mesajları biraz küçülttük */
-            border-radius: 18px; /* Daha yuvarlak */
+            padding: 10px 15px;
+            border-radius: 18px;
             line-height: 1.4;
-            max-width: 80%; /* Bot mesajları biraz daha geniş olabilir */
+            max-width: 80%;
             word-wrap: break-word;
+            transition: background-color 0.3s, color 0.3s;
         }
         .message strong { font-weight: 600; }
+        .message a { /* Link stilleri */
+            color: var(--link-color);
+            text-decoration: none;
+        }
+        .message a:hover { text-decoration: underline; }
+
         .user-message {
-            background-color: #007bff;
-            color: white;
+            background-color: var(--user-msg-bg); /* Değişkeni kullan */
+            color: var(--user-msg-text); /* Değişkeni kullan */
             align-self: flex-end;
             border-bottom-right-radius: 5px;
         }
         .bot-message {
-            background-color: #e9ecef;
-            color: #333;
+            background-color: var(--bot-msg-bg); /* Değişkeni kullan */
+            color: var(--bot-msg-text); /* Değişkeni kullan */
             align-self: flex-start;
             border-bottom-left-radius: 5px;
         }
         .loading {
             align-self: flex-start;
-            color: #999;
+            color: var(--footer-text); /* Değişkeni kullan */
             font-style: italic;
         }
         #input-area {
             display: flex;
-            padding: 15px; /* Biraz daha kompakt */
-            border-top: 1px solid #ddd;
-            background-color: #f9f9f9;
-            flex-shrink: 0; /* Input alanı küçülmesin */
+            padding: 15px;
+            border-top: 1px solid var(--popup-border);
+            background-color: var(--input-area-bg); /* Değişkeni kullan */
+            flex-shrink: 0;
+            transition: background-color 0.3s, border-color 0.3s;
         }
         #message-input {
             flex-grow: 1;
-            border: 1px solid #ccc;
+            border: 1px solid var(--input-border); /* Değişkeni kullan */
             border-radius: 20px;
             padding: 10px 15px;
             font-size: 1em;
             margin-right: 10px;
-            outline-color: #007bff;
+            outline-color: var(--button-bg);
+            background-color: var(--container-bg); /* Input arkaplanı */
+            color: var(--text-color); /* Input yazı rengi */
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         #send-button {
             border: none;
-            background-color: #007bff;
-            color: white;
+            background-color: var(--button-bg); /* Değişkeni kullan */
+            color: var(--button-text); /* Değişkeni kullan */
             border-radius: 50%;
-            width: 40px; /* Butonu biraz küçülttük */
+            width: 40px;
             height: 40px;
             font-size: 1.1em;
             cursor: pointer;
             transition: background-color 0.2s;
-            display: flex; /* İkonu ortalamak için */
+            display: flex;
             align-items: center;
             justify-content: center;
         }
-        #send-button:hover { background-color: #0056b3; }
-        #send-button:disabled { background-color: #aaa; cursor: not-allowed; }
+        #send-button:hover { background-color: var(--button-hover); } /* Değişkeni kullan */
+        #send-button:disabled { background-color: var(--disabled-button); cursor: not-allowed; } /* Değişkeni kullan */
 
         /* --- POPUP STİLLERİ --- */
         #features-popup {
@@ -114,25 +171,29 @@
             bottom: 20px;
             right: 20px;
             width: 300px;
-            background-color: white;
+            background-color: var(--popup-bg); /* Değişkeni kullan */
+            color: var(--text-color); /* Değişkeni kullan */
+            border: 1px solid var(--popup-border); /* Değişkeni kullan */
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 5px 15px var(--popup-shadow); /* Değişkeni kullan */
             z-index: 1000;
             overflow: hidden;
             display: none;
             animation: slideUp 0.5s ease-out;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         #popup-header {
-            background-color: #007bff;
-            color: white;
+            background-color: var(--popup-header-bg); /* Değişkeni kullan */
+            color: var(--popup-header-text); /* Değişkeni kullan */
             padding: 10px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: background-color 0.3s;
         }
         #popup-header h4 { margin: 0; font-size: 1em; }
         #popup-close {
-            background: none; border: none; color: white;
+            background: none; border: none; color: var(--popup-header-text);
             font-size: 20px; font-weight: bold; cursor: pointer;
             opacity: 0.8; padding: 0 5px;
         }
@@ -146,16 +207,44 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* --- YENİ KREDİ STİLİ --- */
+        /* --- KREDİ STİLİ --- */
         .footer-credit {
-            width: 100%; /* Sayfanın tamamını kaplasın */
-            text-align: center; /* Ortala */
-            margin-top: 15px;   /* Chat container ile arasındaki boşluk */
-            padding-bottom: 15px; /* Sayfanın altından boşluk */
-            font-size: 0.8em;   /* Biraz küçük olsun */
-            color: #888;       /* Çok dikkat çekmeyen gri bir renk */
+            width: 100%;
+            text-align: center;
+            margin-top: 15px;
+            padding-bottom: 15px;
+            font-size: 0.8em;
+            color: var(--footer-text); /* Değişkeni kullan */
+            transition: color 0.3s;
         }
-        /* ----------------------- */
+
+        /* --- YENİ: KARANLIK MOD STİLLERİ --- */
+        body.dark-mode {
+            --bg-color: #1a1a1a;
+            --container-bg: #2d2d2d;
+            --text-color: #e0e0e0;
+            --header-bg: #1e88e5; /* Mavi tonunu biraz değiştirebiliriz */
+            --header-text: #ffffff;
+            --user-msg-bg: #1e88e5;
+            --user-msg-text: #ffffff;
+            --bot-msg-bg: #3c3c3c;
+            --bot-msg-text: #e0e0e0;
+            --input-area-bg: #252525;
+            --input-border: #444;
+            --button-bg: #1e88e5;
+            --button-text: #ffffff;
+            --button-hover: #1565c0;
+            --disabled-button: #555;
+            --link-color: #64b5f6; /* Linkler daha açık mavi */
+            --footer-text: #777;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --popup-header-bg: #1e88e5;
+            --popup-header-text: #ffffff;
+            --popup-bg: #2d2d2d;
+            --popup-border: #444;
+            --popup-shadow: rgba(0,0,0,0.3);
+        }
+        /* ---------------------------------- */
 
     </style>
 </head>
@@ -163,8 +252,11 @@
 
     <div id="chat-container">
         <div id="header">
-            <h3>Dijital Aile Danışmanı</h3>
-            <p>UYARI: Bu bir demo projedir. Tıbbi veya yasal tavsiye vermez.</p>
+            <div id="header-title">
+                <h3>Dijital Aile Danışmanı</h3>
+                <p>UYARI: Bu bir demo projedir.</p>
+            </div>
+            <button id="theme-toggle" onclick="toggleTheme()">🌙</button>
         </div>
         <div id="messages">
             <div class="message bot-message">
@@ -179,37 +271,36 @@
 
     <div id="features-popup">
         <div id="popup-header">
-            <h4>🌟 Proje Özellikleri</h4>
-            <button id="popup-close" onclick="kapatPopup()">×</button>
+            <h4>🌟 Proje Özellikleri (v1.1)</h4> <button id="popup-close" onclick="kapatPopup()">×</button>
         </div>
         <div id="popup-content">
-             <ul>
-                <li>🧠 Akıllı Gemini API Motoru</li>
+             <ul> <li>🧠 Akıllı Gemini API Motoru</li>
                 <li>🕊️ Etik Güvenlik Filtresi (ALO 183/112)</li>
                 <li>🗣️ Duygusal Ton Algılama (Talimat Destekli)</li>
                 <li>🔒 Veri Gizliliği Garantisi (Kayıt Tutmaz)</li>
-                <li>🌍 Çoklu Dil Desteği (Potansiyel)</li>
                 <li>🧩 Uzman Yönlendirme Modülü</li>
                 <li>📊 Aile İstatistik Panosu (Gelecek Özellik)</li>
                 <li>📝 **Kalın Yazı** & Paragraf Desteği</li>
-            </ul>
+             </ul>
         </div>
     </div>
 
     <div class="footer-credit">
-        Yapımcı: Emirhan Bıçakcı ✨
+        Yapımcı: Gemini ✨
     </div>
     <script>
         const messagesDiv = document.getElementById('messages');
         const inputField = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
         const popup = document.getElementById('features-popup');
+        const themeToggleButton = document.getElementById('theme-toggle'); // Yeni buton
 
-        // ÖNEMLİ: Bu adresi KENDİ RENDER ADRESİNİZLE DEĞİŞTİRİN
+        // API URL'inizi buraya yapıştırın
         const API_URL = 'https://okul-api.onrender.com/api/mesaj'; // <-- KONTROL ET
 
         async function sendMessage() {
-            const messageText = inputField.value.trim();
+            // ... (sendMessage fonksiyonu aynı, değişiklik yok) ...
+             const messageText = inputField.value.trim();
             if (messageText === '' || sendButton.disabled) return;
 
             addMessageToUI(messageText, 'user-message');
@@ -253,22 +344,53 @@
             }
         }
 
+
         // --- GÜNCELLENMİŞ FONKSİYON (Markdown -> HTML) ---
         function addMessageToUI(text, cssClass) {
+            // ... (addMessageToUI fonksiyonu aynı, değişiklik yok) ...
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message ' + cssClass;
 
             let safeText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             safeText = safeText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            // safeText = safeText.replace(/_(.*?)_/g, '<em>$1</em>'); // İtalik isterseniz açabilirsiniz
             safeText = safeText.replace(/\n/g, '<br>');
+            // Linkleri de çevirelim (Güvenlik için basit versiyon)
+             safeText = safeText.replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+
 
             messageDiv.innerHTML = safeText;
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
             return messageDiv;
         }
-        // ----------------------------------------------------
+
+        // --- YENİ: Karanlık Mod Fonksiyonları ---
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            // İkonu değiştir (Basit versiyon: Ay ise Güneş yap, değilse Ay yap)
+            if (document.body.classList.contains('dark-mode')) {
+                themeToggleButton.textContent = '☀️';
+                // Seçimi kaydet
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeToggleButton.textContent = '🌙';
+                // Seçimi kaydet
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Sayfa yüklendiğinde kaydedilmiş temayı uygula
+        function applySavedTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggleButton.textContent = '☀️';
+            } else {
+                // Varsayılan açık moddur, ikon ay kalsın
+                themeToggleButton.textContent = '🌙';
+            }
+        }
+        // ------------------------------------
 
         inputField.addEventListener('keypress', function (e) {
             if (e.key === 'Enter' && !sendButton.disabled) { sendMessage(); }
@@ -277,6 +399,7 @@
         function kapatPopup() { popup.style.display = 'none'; }
 
         window.addEventListener('load', function() {
+            applySavedTheme(); // Kaydedilmiş temayı yükle
             setTimeout(function() { popup.style.display = 'block'; }, 2000);
         });
 
@@ -284,4 +407,3 @@
 
 </body>
 </html>
-
