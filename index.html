@@ -6,191 +6,101 @@
     <title>Dijital Aile Danışmanı</title>
     <style>
         /* --- TEMEL ARAYÜZ STİLLERİ --- */
-        :root {
-            /* Açık Mod Renkleri (Varsayılan) */
-            --bg-color: #f4f7f6;
-            --container-bg: #ffffff;
-            --text-color: #333;
-            --header-bg: #007bff;
-            --header-text: #ffffff;
-            --user-msg-bg: #007bff;
-            --user-msg-text: #ffffff;
-            --bot-msg-bg: #e9ecef;
-            --bot-msg-text: #333;
-            --input-area-bg: #f9f9f9;
-            --input-border: #ccc;
-            --button-bg: #007bff;
-            --button-text: #ffffff;
-            --button-hover: #0056b3;
-            --disabled-button: #aaa;
-            --link-color: #007bff;
-            --footer-text: #888;
-            --shadow-color: rgba(0, 0, 0, 0.05);
-            --popup-header-bg: #007bff;
-            --popup-header-text: #ffffff;
-            --popup-bg: #ffffff;
-            --popup-border: #ddd;
-            --popup-shadow: rgba(0,0,0,0.15);
+        :root { /* Renk Değişkenleri */
+            --bg-color: #f4f7f6; --container-bg: #ffffff; --text-color: #333;
+            --header-bg: #007bff; --header-text: #ffffff; --user-msg-bg: #007bff;
+            --user-msg-text: #ffffff; --bot-msg-bg: #e9ecef; --bot-msg-text: #333;
+            --input-area-bg: #f9f9f9; --input-border: #ccc; --button-bg: #007bff;
+            --button-text: #ffffff; --button-hover: #0056b3; --disabled-button: #aaa;
+            --link-color: #007bff; --footer-text: #888; --shadow-color: rgba(0, 0, 0, 0.05);
+            --popup-header-bg: #007bff; --popup-header-text: #ffffff; --popup-bg: #ffffff;
+            --popup-border: #ddd; --popup-shadow: rgba(0,0,0,0.15);
+            --info-text-color: #6c757d; /* Yeni Bilgi Notu Rengi */
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color); /* Değişkeni kullan */
-            color: var(--text-color); /* Değişkeni kullan */
-            margin: 0;
-            padding: 20px 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-            transition: background-color 0.3s, color 0.3s; /* Geçiş efekti */
+            background-color: var(--bg-color); color: var(--text-color); margin: 0;
+            padding: 20px 0; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; min-height: 100vh;
+            box-sizing: border-box; transition: background-color 0.3s, color 0.3s;
         }
         #chat-container {
-            width: 90%;
-            max-width: 600px;
-            height: 80vh;
-            max-height: 700px;
-            background-color: var(--container-bg); /* Değişkeni kullan */
-            border-radius: 12px;
-            box-shadow: 0 4px 12px var(--shadow-color); /* Değişkeni kullan */
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            margin-bottom: 20px;
+            width: 90%; max-width: 600px; height: 80vh; max-height: 700px;
+            background-color: var(--container-bg); border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow-color); display: flex;
+            flex-direction: column; overflow: hidden; margin-bottom: 10px; /* Not için boşluk azalttık */
             transition: background-color 0.3s, box-shadow 0.3s;
         }
         #header {
-            padding: 15px 20px;
-            background: var(--header-bg); /* Değişkeni kullan */
-            color: var(--header-text); /* Değişkeni kullan */
-            text-align: center;
-            border-bottom: 1px solid var(--popup-border);
-            flex-shrink: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 15px 20px; background: var(--header-bg); color: var(--header-text);
+            text-align: center; border-bottom: 1px solid var(--popup-border); flex-shrink: 0;
+            display: flex; justify-content: space-between; align-items: center;
             transition: background-color 0.3s;
         }
         #header-title h3 { margin: 0; font-size: 1.1em; }
         #header-title p { margin: 5px 0 0; font-size: 0.8em; opacity: 0.9;}
-
         #theme-toggle {
-            background: none;
-            border: none;
-            color: var(--header-text);
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 5px;
-            line-height: 1;
+            background: none; border: none; color: var(--header-text); font-size: 1.5em;
+            cursor: pointer; padding: 5px; line-height: 1;
         }
-
         #messages {
-            flex-grow: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            flex-grow: 1; padding: 20px; overflow-y: auto; display: flex;
+            flex-direction: column; gap: 15px;
         }
         .message {
-            padding: 10px 15px;
-            border-radius: 18px;
-            line-height: 1.4;
-            max-width: 80%;
-            word-wrap: break-word;
+            padding: 10px 15px; border-radius: 18px; line-height: 1.4;
+            max-width: 80%; word-wrap: break-word;
             transition: background-color 0.3s, color 0.3s;
         }
         .message strong { font-weight: 600; }
-        .message a {
-            color: var(--link-color);
-            text-decoration: none;
-        }
+        .message a { color: var(--link-color); text-decoration: none; }
         .message a:hover { text-decoration: underline; }
-
         .user-message {
-            background-color: var(--user-msg-bg);
-            color: var(--user-msg-text);
-            align-self: flex-end;
-            border-bottom-right-radius: 5px;
+            background-color: var(--user-msg-bg); color: var(--user-msg-text);
+            align-self: flex-end; border-bottom-right-radius: 5px;
         }
         .bot-message {
-            background-color: var(--bot-msg-bg);
-            color: var(--bot-msg-text);
-            align-self: flex-start;
-            border-bottom-left-radius: 5px;
+            background-color: var(--bot-msg-bg); color: var(--bot-msg-text);
+            align-self: flex-start; border-bottom-left-radius: 5px;
         }
-        .loading {
-            align-self: flex-start;
-            color: var(--footer-text);
-            font-style: italic;
-        }
+        .loading { align-self: flex-start; color: var(--footer-text); font-style: italic; }
         #input-area {
-            display: flex;
-            padding: 15px;
-            border-top: 1px solid var(--popup-border);
-            background-color: var(--input-area-bg);
-            flex-shrink: 0;
+            display: flex; padding: 15px; border-top: 1px solid var(--popup-border);
+            background-color: var(--input-area-bg); flex-shrink: 0;
             transition: background-color 0.3s, border-color 0.3s;
         }
         #message-input {
-            flex-grow: 1;
-            border: 1px solid var(--input-border);
-            border-radius: 20px;
-            padding: 10px 15px;
-            font-size: 1em;
-            margin-right: 10px;
-            outline-color: var(--button-bg);
-            background-color: var(--container-bg);
+            flex-grow: 1; border: 1px solid var(--input-border); border-radius: 20px;
+            padding: 10px 15px; font-size: 1em; margin-right: 10px;
+            outline-color: var(--button-bg); background-color: var(--container-bg);
             color: var(--text-color);
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         #send-button {
-            border: none;
-            background-color: var(--button-bg);
-            color: var(--button-text);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border: none; background-color: var(--button-bg); color: var(--button-text);
+            border-radius: 50%; width: 40px; height: 40px; font-size: 1.1em;
+            cursor: pointer; transition: background-color 0.2s; display: flex;
+            align-items: center; justify-content: center;
         }
         #send-button:hover { background-color: var(--button-hover); }
         #send-button:disabled { background-color: var(--disabled-button); cursor: not-allowed; }
 
         /* --- POPUP STİLLERİ --- */
-        #features-popup {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 300px;
-            background-color: var(--popup-bg);
-            color: var(--text-color);
-            border: 1px solid var(--popup-border);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px var(--popup-shadow);
-            z-index: 1000;
-            overflow: hidden;
-            display: none;
-            animation: slideUp 0.5s ease-out;
+        #features-popup { /* ... (Popup stilleri aynı kaldı) ... */
+            position: fixed; bottom: 20px; right: 20px; width: 300px;
+            background-color: var(--popup-bg); color: var(--text-color);
+            border: 1px solid var(--popup-border); border-radius: 10px;
+            box-shadow: 0 5px 15px var(--popup-shadow); z-index: 1000;
+            overflow: hidden; display: none; animation: slideUp 0.5s ease-out;
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
-        #popup-header {
-            background-color: var(--popup-header-bg);
-            color: var(--popup-header-text);
-            padding: 10px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.3s;
+        #popup-header { /* ... */
+            background-color: var(--popup-header-bg); color: var(--popup-header-text);
+            padding: 10px 15px; display: flex; justify-content: space-between;
+            align-items: center; transition: background-color 0.3s;
         }
         #popup-header h4 { margin: 0; font-size: 1em; }
-        #popup-close {
+        #popup-close { /* ... */
             background: none; border: none; color: var(--popup-header-text);
             font-size: 20px; font-weight: bold; cursor: pointer;
             opacity: 0.8; padding: 0 5px;
@@ -199,49 +109,41 @@
         #popup-content { padding: 15px; }
         #popup-content ul { list-style: none; padding-left: 0; margin: 0; }
         #popup-content li { margin-bottom: 10px; font-size: 0.9em; }
-
-        @keyframes slideUp {
+        @keyframes slideUp { /* ... */
             from { transform: translateY(50px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
         /* --- KREDİ STİLİ --- */
-        .footer-credit {
-            width: 100%;
-            text-align: center;
-            margin-top: 15px;
-            padding-bottom: 15px;
-            font-size: 0.8em;
-            color: var(--footer-text);
-            transition: color 0.3s;
+        .footer-credit { /* ... (Footer stili aynı kaldı) ... */
+            width: 100%; text-align: center; margin-top: 15px; padding-bottom: 15px;
+            font-size: 0.8em; color: var(--footer-text); transition: color 0.3s;
         }
 
         /* --- KARANLIK MOD STİLLERİ --- */
-        body.dark-mode {
-            --bg-color: #1a1a1a;
-            --container-bg: #2d2d2d;
-            --text-color: #e0e0e0;
-            --header-bg: #1e88e5;
-            --header-text: #ffffff;
-            --user-msg-bg: #1e88e5;
-            --user-msg-text: #ffffff;
-            --bot-msg-bg: #3c3c3c;
-            --bot-msg-text: #e0e0e0;
-            --input-area-bg: #252525;
-            --input-border: #444;
-            --button-bg: #1e88e5;
-            --button-text: #ffffff;
-            --button-hover: #1565c0;
-            --disabled-button: #555;
-            --link-color: #64b5f6;
-            --footer-text: #777;
-            --shadow-color: rgba(0, 0, 0, 0.2);
-            --popup-header-bg: #1e88e5;
-            --popup-header-text: #ffffff;
-            --popup-bg: #2d2d2d;
-            --popup-border: #444;
-            --popup-shadow: rgba(0,0,0,0.3);
+        body.dark-mode { /* ... (Karanlık Mod stilleri aynı kaldı) ... */
+            --bg-color: #1a1a1a; --container-bg: #2d2d2d; --text-color: #e0e0e0;
+            --header-bg: #1e88e5; --header-text: #ffffff; --user-msg-bg: #1e88e5;
+            --user-msg-text: #ffffff; --bot-msg-bg: #3c3c3c; --bot-msg-text: #e0e0e0;
+            --input-area-bg: #252525; --input-border: #444; --button-bg: #1e88e5;
+            --button-text: #ffffff; --button-hover: #1565c0; --disabled-button: #555;
+            --link-color: #64b5f6; --footer-text: #777; --shadow-color: rgba(0, 0, 0, 0.2);
+            --popup-header-bg: #1e88e5; --popup-header-text: #ffffff; --popup-bg: #2d2d2d;
+            --popup-border: #444; --popup-shadow: rgba(0,0,0,0.3);
+            --info-text-color: #adb5bd; /* Karanlık modda bilgi notu rengi */
         }
+
+        /* --- YENİ: Bilgilendirme Notu Stili --- */
+        .info-note {
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            font-size: 0.75em; /* Çok küçük */
+            color: var(--info-text-color); /* Gri tonu */
+            margin-bottom: 15px; /* Footer ile arasında boşluk */
+            transition: color 0.3s;
+        }
+        /* ------------------------------------- */
 
     </style>
 </head>
@@ -266,6 +168,9 @@
         </div>
     </div>
 
+    <p class="info-note">
+        Not: Ücretsiz sunucu kullanıldığı için ilk yanıt biraz gecikebilir. Anlayışınız için teşekkürler.
+    </p>
     <div id="features-popup">
         <div id="popup-header">
             <h4>🌟 Proje Özellikleri (v1.1)</h4>
@@ -289,113 +194,68 @@
         Yapımcı: Emirhan Bıçakcı ✨
     </div>
     <script>
+        // --- JavaScript (Değişiklik Yok) ---
         const messagesDiv = document.getElementById('messages');
         const inputField = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
         const popup = document.getElementById('features-popup');
         const themeToggleButton = document.getElementById('theme-toggle');
 
-        // API URL'inizi buraya yapıştırın
         const API_URL = 'https://okul-api.onrender.com/api/mesaj'; // <-- KONTROL ET
 
-        async function sendMessage() {
-            // ... (sendMessage fonksiyonu aynı) ...
+        async function sendMessage() { /* ... (Fonksiyon aynı) ... */
             const messageText = inputField.value.trim();
             if (messageText === '' || sendButton.disabled) return;
-
             addMessageToUI(messageText, 'user-message');
-            inputField.value = '';
-            sendButton.disabled = true;
-
+            inputField.value = ''; sendButton.disabled = true;
             const loadingDiv = addMessageToUI('Düşünüyorum...', 'loading');
-
             try {
                 const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ mesaj: messageText })
                 });
-
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({ hata: 'Sunucu geçersiz yanıt verdi.' }));
                     throw new Error(errorData.hata || 'Sunucu hatası oluştu: ' + response.status);
                 }
-
                 const data = await response.json();
-
                 loadingDiv.remove();
-                if(data.cevap) {
-                    addMessageToUI(data.cevap, 'bot-message');
-                } else {
-                    addMessageToUI(data.hata || "Bilinmeyen bir hata.", 'bot-message');
-                }
-
+                if(data.cevap) { addMessageToUI(data.cevap, 'bot-message'); }
+                else { addMessageToUI(data.hata || "Bilinmeyen bir hata.", 'bot-message'); }
             } catch (error) {
                 loadingDiv.remove();
                 let errorMessage = "Üzgünüm, bir hata oluştu. Lütfen daha sonra tekrar deneyin.";
                  if (error && error.message) { errorMessage = error.message; }
-                addMessageToUI(errorMessage, 'bot-message');
-                console.error('Hata Detayı:', error);
-            } finally {
-                sendButton.disabled = false;
-                inputField.focus();
-            }
+                addMessageToUI(errorMessage, 'bot-message'); console.error('Hata Detayı:', error);
+            } finally { sendButton.disabled = false; inputField.focus(); }
         }
-
-
-        // --- GÜNCELLENMİŞ FONKSİYON (Markdown -> HTML) ---
-        function addMessageToUI(text, cssClass) {
-            // ... (addMessageToUI fonksiyonu aynı) ...
+        function addMessageToUI(text, cssClass) { /* ... (Fonksiyon aynı) ... */
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message ' + cssClass;
-
             let safeText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             safeText = safeText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             safeText = safeText.replace(/\n/g, '<br>');
             safeText = safeText.replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-
-            messageDiv.innerHTML = safeText;
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
-            return messageDiv;
+            messageDiv.innerHTML = safeText; messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' }); return messageDiv;
         }
-
-        // --- Karanlık Mod Fonksiyonları ---
-        function toggleTheme() {
+        function toggleTheme() { /* ... (Fonksiyon aynı) ... */
             document.body.classList.toggle('dark-mode');
             if (document.body.classList.contains('dark-mode')) {
-                themeToggleButton.textContent = '☀️';
-                localStorage.setItem('theme', 'dark');
-            } else {
-                themeToggleButton.textContent = '🌙';
-                localStorage.setItem('theme', 'light');
-            }
+                themeToggleButton.textContent = '☀️'; localStorage.setItem('theme', 'dark');
+            } else { themeToggleButton.textContent = '🌙'; localStorage.setItem('theme', 'light'); }
         }
-        function applySavedTheme() {
+        function applySavedTheme() { /* ... (Fonksiyon aynı) ... */
             const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-                themeToggleButton.textContent = '☀️';
-            } else {
-                themeToggleButton.textContent = '🌙';
-            }
+            if (savedTheme === 'dark') { document.body.classList.add('dark-mode'); themeToggleButton.textContent = '☀️';
+            } else { themeToggleButton.textContent = '🌙'; }
         }
-
-        inputField.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter' && !sendButton.disabled) { sendMessage(); }
-        });
-
+        inputField.addEventListener('keypress', function (e) { /* ... (Fonksiyon aynı) ... */
+            if (e.key === 'Enter' && !sendButton.disabled) { sendMessage(); } });
         function kapatPopup() { popup.style.display = 'none'; }
-
-        window.addEventListener('load', function() {
-            applySavedTheme();
-            setTimeout(function() { popup.style.display = 'block'; }, 2000);
-        });
-
+        window.addEventListener('load', function() { /* ... (Fonksiyon aynı) ... */
+            applySavedTheme(); setTimeout(function() { popup.style.display = 'block'; }, 2000); });
     </script>
 
 </body>
 </html>
-
