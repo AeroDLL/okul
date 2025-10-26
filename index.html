@@ -68,25 +68,23 @@
             text-align: center;
             border-bottom: 1px solid var(--popup-border);
             flex-shrink: 0;
-            display: flex; /* Buton için */
-            justify-content: space-between; /* Buton için */
-            align-items: center; /* Buton için */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             transition: background-color 0.3s;
         }
         #header-title h3 { margin: 0; font-size: 1.1em; }
         #header-title p { margin: 5px 0 0; font-size: 0.8em; opacity: 0.9;}
 
-        /* --- YENİ: Karanlık Mod Butonu Stili --- */
         #theme-toggle {
             background: none;
             border: none;
             color: var(--header-text);
-            font-size: 1.5em; /* İkon boyutu */
+            font-size: 1.5em;
             cursor: pointer;
             padding: 5px;
-            line-height: 1; /* Dikey hizalama için */
+            line-height: 1;
         }
-        /* ------------------------------------- */
 
         #messages {
             flex-grow: 1;
@@ -105,53 +103,53 @@
             transition: background-color 0.3s, color 0.3s;
         }
         .message strong { font-weight: 600; }
-        .message a { /* Link stilleri */
+        .message a {
             color: var(--link-color);
             text-decoration: none;
         }
         .message a:hover { text-decoration: underline; }
 
         .user-message {
-            background-color: var(--user-msg-bg); /* Değişkeni kullan */
-            color: var(--user-msg-text); /* Değişkeni kullan */
+            background-color: var(--user-msg-bg);
+            color: var(--user-msg-text);
             align-self: flex-end;
             border-bottom-right-radius: 5px;
         }
         .bot-message {
-            background-color: var(--bot-msg-bg); /* Değişkeni kullan */
-            color: var(--bot-msg-text); /* Değişkeni kullan */
+            background-color: var(--bot-msg-bg);
+            color: var(--bot-msg-text);
             align-self: flex-start;
             border-bottom-left-radius: 5px;
         }
         .loading {
             align-self: flex-start;
-            color: var(--footer-text); /* Değişkeni kullan */
+            color: var(--footer-text);
             font-style: italic;
         }
         #input-area {
             display: flex;
             padding: 15px;
             border-top: 1px solid var(--popup-border);
-            background-color: var(--input-area-bg); /* Değişkeni kullan */
+            background-color: var(--input-area-bg);
             flex-shrink: 0;
             transition: background-color 0.3s, border-color 0.3s;
         }
         #message-input {
             flex-grow: 1;
-            border: 1px solid var(--input-border); /* Değişkeni kullan */
+            border: 1px solid var(--input-border);
             border-radius: 20px;
             padding: 10px 15px;
             font-size: 1em;
             margin-right: 10px;
             outline-color: var(--button-bg);
-            background-color: var(--container-bg); /* Input arkaplanı */
-            color: var(--text-color); /* Input yazı rengi */
+            background-color: var(--container-bg);
+            color: var(--text-color);
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         #send-button {
             border: none;
-            background-color: var(--button-bg); /* Değişkeni kullan */
-            color: var(--button-text); /* Değişkeni kullan */
+            background-color: var(--button-bg);
+            color: var(--button-text);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -162,8 +160,8 @@
             align-items: center;
             justify-content: center;
         }
-        #send-button:hover { background-color: var(--button-hover); } /* Değişkeni kullan */
-        #send-button:disabled { background-color: var(--disabled-button); cursor: not-allowed; } /* Değişkeni kullan */
+        #send-button:hover { background-color: var(--button-hover); }
+        #send-button:disabled { background-color: var(--disabled-button); cursor: not-allowed; }
 
         /* --- POPUP STİLLERİ --- */
         #features-popup {
@@ -171,11 +169,11 @@
             bottom: 20px;
             right: 20px;
             width: 300px;
-            background-color: var(--popup-bg); /* Değişkeni kullan */
-            color: var(--text-color); /* Değişkeni kullan */
-            border: 1px solid var(--popup-border); /* Değişkeni kullan */
+            background-color: var(--popup-bg);
+            color: var(--text-color);
+            border: 1px solid var(--popup-border);
             border-radius: 10px;
-            box-shadow: 0 5px 15px var(--popup-shadow); /* Değişkeni kullan */
+            box-shadow: 0 5px 15px var(--popup-shadow);
             z-index: 1000;
             overflow: hidden;
             display: none;
@@ -183,8 +181,8 @@
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         #popup-header {
-            background-color: var(--popup-header-bg); /* Değişkeni kullan */
-            color: var(--popup-header-text); /* Değişkeni kullan */
+            background-color: var(--popup-header-bg);
+            color: var(--popup-header-text);
             padding: 10px 15px;
             display: flex;
             justify-content: space-between;
@@ -214,16 +212,16 @@
             margin-top: 15px;
             padding-bottom: 15px;
             font-size: 0.8em;
-            color: var(--footer-text); /* Değişkeni kullan */
+            color: var(--footer-text);
             transition: color 0.3s;
         }
 
-        /* --- YENİ: KARANLIK MOD STİLLERİ --- */
+        /* --- KARANLIK MOD STİLLERİ --- */
         body.dark-mode {
             --bg-color: #1a1a1a;
             --container-bg: #2d2d2d;
             --text-color: #e0e0e0;
-            --header-bg: #1e88e5; /* Mavi tonunu biraz değiştirebiliriz */
+            --header-bg: #1e88e5;
             --header-text: #ffffff;
             --user-msg-bg: #1e88e5;
             --user-msg-text: #ffffff;
@@ -235,7 +233,7 @@
             --button-text: #ffffff;
             --button-hover: #1565c0;
             --disabled-button: #555;
-            --link-color: #64b5f6; /* Linkler daha açık mavi */
+            --link-color: #64b5f6;
             --footer-text: #777;
             --shadow-color: rgba(0, 0, 0, 0.2);
             --popup-header-bg: #1e88e5;
@@ -244,7 +242,6 @@
             --popup-border: #444;
             --popup-shadow: rgba(0,0,0,0.3);
         }
-        /* ---------------------------------- */
 
     </style>
 </head>
@@ -271,16 +268,19 @@
 
     <div id="features-popup">
         <div id="popup-header">
-            <h4>🌟 Proje Özellikleri (v1.1)</h4> <button id="popup-close" onclick="kapatPopup()">×</button>
+            <h4>🌟 Proje Özellikleri (v1.1)</h4>
+            <button id="popup-close" onclick="kapatPopup()">×</button>
         </div>
         <div id="popup-content">
-             <ul> <li>🧠 Akıllı Gemini API Motoru</li>
-                <li>🕊️ Etik Güvenlik Filtresi (ALO 183/112)</li>
-                <li>🗣️ Duygusal Ton Algılama (Talimat Destekli)</li>
-                <li>🔒 Veri Gizliliği Garantisi (Kayıt Tutmaz)</li>
-                <li>🧩 Uzman Yönlendirme Modülü</li>
-                <li>📊 Aile İstatistik Panosu (Gelecek Özellik)</li>
-                <li>📝 **Kalın Yazı** & Paragraf Desteği</li>
+             <ul>
+                 <li>🎨 Karanlık Mod Desteği</li>
+                 <li>🧠 Akıllı Gemini API Motoru</li>
+                 <li>🕊️ Etik Güvenlik Filtresi (ALO 183/112)</li>
+                 <li>🗣️ Duygusal Ton Algılama (Talimat Destekli)</li>
+                 <li>🔒 Veri Gizliliği Garantisi (Kayıt Tutmaz)</li>
+                 <li>🧩 Uzman Yönlendirme Modülü</li>
+                 <li>📊 Aile İstatistik Panosu (Gelecek Özellik)</li>
+                 <li>📝 **Kalın Yazı** & Paragraf Desteği</li>
              </ul>
         </div>
     </div>
@@ -293,14 +293,14 @@
         const inputField = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
         const popup = document.getElementById('features-popup');
-        const themeToggleButton = document.getElementById('theme-toggle'); // Yeni buton
+        const themeToggleButton = document.getElementById('theme-toggle');
 
         // API URL'inizi buraya yapıştırın
         const API_URL = 'https://okul-api.onrender.com/api/mesaj'; // <-- KONTROL ET
 
         async function sendMessage() {
-            // ... (sendMessage fonksiyonu aynı, değişiklik yok) ...
-             const messageText = inputField.value.trim();
+            // ... (sendMessage fonksiyonu aynı) ...
+            const messageText = inputField.value.trim();
             if (messageText === '' || sendButton.disabled) return;
 
             addMessageToUI(messageText, 'user-message');
@@ -347,16 +347,14 @@
 
         // --- GÜNCELLENMİŞ FONKSİYON (Markdown -> HTML) ---
         function addMessageToUI(text, cssClass) {
-            // ... (addMessageToUI fonksiyonu aynı, değişiklik yok) ...
+            // ... (addMessageToUI fonksiyonu aynı) ...
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message ' + cssClass;
 
             let safeText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             safeText = safeText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             safeText = safeText.replace(/\n/g, '<br>');
-            // Linkleri de çevirelim (Güvenlik için basit versiyon)
-             safeText = safeText.replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-
+            safeText = safeText.replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
 
             messageDiv.innerHTML = safeText;
             messagesDiv.appendChild(messageDiv);
@@ -364,33 +362,26 @@
             return messageDiv;
         }
 
-        // --- YENİ: Karanlık Mod Fonksiyonları ---
+        // --- Karanlık Mod Fonksiyonları ---
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
-            // İkonu değiştir (Basit versiyon: Ay ise Güneş yap, değilse Ay yap)
             if (document.body.classList.contains('dark-mode')) {
                 themeToggleButton.textContent = '☀️';
-                // Seçimi kaydet
                 localStorage.setItem('theme', 'dark');
             } else {
                 themeToggleButton.textContent = '🌙';
-                // Seçimi kaydet
                 localStorage.setItem('theme', 'light');
             }
         }
-
-        // Sayfa yüklendiğinde kaydedilmiş temayı uygula
         function applySavedTheme() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
                 document.body.classList.add('dark-mode');
                 themeToggleButton.textContent = '☀️';
             } else {
-                // Varsayılan açık moddur, ikon ay kalsın
                 themeToggleButton.textContent = '🌙';
             }
         }
-        // ------------------------------------
 
         inputField.addEventListener('keypress', function (e) {
             if (e.key === 'Enter' && !sendButton.disabled) { sendMessage(); }
@@ -399,7 +390,7 @@
         function kapatPopup() { popup.style.display = 'none'; }
 
         window.addEventListener('load', function() {
-            applySavedTheme(); // Kaydedilmiş temayı yükle
+            applySavedTheme();
             setTimeout(function() { popup.style.display = 'block'; }, 2000);
         });
 
