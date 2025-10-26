@@ -10,30 +10,36 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #f4f7f6;
             margin: 0;
+            padding: 20px 0; /* Sayfanın tamamı için biraz boşluk */
             display: flex;
+            flex-direction: column; /* Dikey hizalama için */
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh; /* Tüm yüksekliği kaplamasını sağla */
+            box-sizing: border-box; /* Padding'i dahil et */
         }
         #chat-container {
             width: 90%;
             max-width: 600px;
-            height: 80vh;
+            height: 80vh; /* Yüksekliği biraz azalttık, footer için yer kalsın */
+            max-height: 700px; /* Çok uzun ekranlarda aşırı büyümesin */
             background-color: #ffffff;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            margin-bottom: 20px; /* Footer ile arasında boşluk */
         }
         #header {
-            padding: 20px;
+            padding: 15px 20px; /* Biraz daha kompakt */
             background: #007bff;
             color: white;
             text-align: center;
             border-bottom: 1px solid #ddd;
+            flex-shrink: 0; /* Header küçülmesin */
         }
-        #header h3 { margin: 0; }
+        #header h3 { margin: 0; font-size: 1.1em; }
         #header p { margin: 5px 0 0; font-size: 0.8em; opacity: 0.9;}
 
         #messages {
@@ -45,16 +51,13 @@
             gap: 15px;
         }
         .message {
-            padding: 12px 18px;
-            border-radius: 20px;
+            padding: 10px 15px; /* Mesajları biraz küçülttük */
+            border-radius: 18px; /* Daha yuvarlak */
             line-height: 1.4;
-            max-width: 75%;
-            word-wrap: break-word; /* Kelimeler taşmasın */
+            max-width: 80%; /* Bot mesajları biraz daha geniş olabilir */
+            word-wrap: break-word;
         }
-        /* Kalın yazının düzgün görünmesi için */
-        .message strong {
-            font-weight: 600; /* Daha belirgin yapabiliriz */
-        }
+        .message strong { font-weight: 600; }
         .user-message {
             background-color: #007bff;
             color: white;
@@ -74,9 +77,10 @@
         }
         #input-area {
             display: flex;
-            padding: 20px;
+            padding: 15px; /* Biraz daha kompakt */
             border-top: 1px solid #ddd;
             background-color: #f9f9f9;
+            flex-shrink: 0; /* Input alanı küçülmesin */
         }
         #message-input {
             flex-grow: 1;
@@ -85,26 +89,24 @@
             padding: 10px 15px;
             font-size: 1em;
             margin-right: 10px;
-            outline-color: #007bff; /* Tıklayınca mavi olsun */
+            outline-color: #007bff;
         }
         #send-button {
             border: none;
             background-color: #007bff;
             color: white;
             border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            font-size: 1.2em;
+            width: 40px; /* Butonu biraz küçülttük */
+            height: 40px;
+            font-size: 1.1em;
             cursor: pointer;
-            transition: background-color 0.2s; /* Hover efekti */
+            transition: background-color 0.2s;
+            display: flex; /* İkonu ortalamak için */
+            align-items: center;
+            justify-content: center;
         }
-        #send-button:hover {
-            background-color: #0056b3;
-        }
-        #send-button:disabled {
-            background-color: #aaa;
-            cursor: not-allowed;
-        }
+        #send-button:hover { background-color: #0056b3; }
+        #send-button:disabled { background-color: #aaa; cursor: not-allowed; }
 
         /* --- POPUP STİLLERİ --- */
         #features-popup {
@@ -130,14 +132,9 @@
         }
         #popup-header h4 { margin: 0; font-size: 1em; }
         #popup-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            opacity: 0.8;
-            padding: 0 5px; /* Tıklama alanını biraz büyüt */
+            background: none; border: none; color: white;
+            font-size: 20px; font-weight: bold; cursor: pointer;
+            opacity: 0.8; padding: 0 5px;
         }
         #popup-close:hover { opacity: 1; }
         #popup-content { padding: 15px; }
@@ -148,6 +145,18 @@
             from { transform: translateY(50px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+
+        /* --- YENİ KREDİ STİLİ --- */
+        .footer-credit {
+            width: 100%; /* Sayfanın tamamını kaplasın */
+            text-align: center; /* Ortala */
+            margin-top: 15px;   /* Chat container ile arasındaki boşluk */
+            padding-bottom: 15px; /* Sayfanın altından boşluk */
+            font-size: 0.8em;   /* Biraz küçük olsun */
+            color: #888;       /* Çok dikkat çekmeyen gri bir renk */
+        }
+        /* ----------------------- */
+
     </style>
 </head>
 <body>
@@ -155,7 +164,7 @@
     <div id="chat-container">
         <div id="header">
             <h3>Dijital Aile Danışmanı</h3>
-            <p>UYARI: Bu bir demo projedir. Tıbbi veya yasal tavsiye vermez.Author:Emirhan Bıçakcı</p>
+            <p>UYARI: Bu bir demo projedir. Tıbbi veya yasal tavsiye vermez.</p>
         </div>
         <div id="messages">
             <div class="message bot-message">
@@ -188,22 +197,25 @@
         </div>
     </div>
 
+    <div class="footer-credit">
+        Yapımcı: Emirhan Bıçakcı ✨
+    </div>
     <script>
         const messagesDiv = document.getElementById('messages');
         const inputField = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
-        const popup = document.getElementById('features-popup'); // Popup'ı değişkene al
+        const popup = document.getElementById('features-popup');
 
         // ÖNEMLİ: Bu adresi KENDİ RENDER ADRESİNİZLE DEĞİŞTİRİN
         const API_URL = 'https://okul-api.onrender.com/api/mesaj'; // <-- KONTROL ET
 
         async function sendMessage() {
             const messageText = inputField.value.trim();
-            if (messageText === '' || sendButton.disabled) return; // Boşsa veya buton kilitliyse gönderme
+            if (messageText === '' || sendButton.disabled) return;
 
             addMessageToUI(messageText, 'user-message');
             inputField.value = '';
-            sendButton.disabled = true; // Butonu kilitle
+            sendButton.disabled = true;
 
             const loadingDiv = addMessageToUI('Düşünüyorum...', 'loading');
 
@@ -216,7 +228,6 @@
                     body: JSON.stringify({ mesaj: messageText })
                 });
 
-                // Hata mesajını daha iyi işle
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({ hata: 'Sunucu geçersiz yanıt verdi.' }));
                     throw new Error(errorData.hata || 'Sunucu hatası oluştu: ' + response.status);
@@ -224,7 +235,7 @@
 
                 const data = await response.json();
 
-                loadingDiv.remove(); // Yükleniyor... mesajını kaldır
+                loadingDiv.remove();
                 if(data.cevap) {
                     addMessageToUI(data.cevap, 'bot-message');
                 } else {
@@ -232,18 +243,14 @@
                 }
 
             } catch (error) {
-                loadingDiv.remove(); // Hata olsa bile yükleniyor... mesajını kaldır
+                loadingDiv.remove();
                 let errorMessage = "Üzgünüm, bir hata oluştu. Lütfen daha sonra tekrar deneyin.";
-                 // Sunucudan gelen hata mesajını göster (eğer varsa)
-                 if (error && error.message) {
-                      errorMessage = error.message;
-                 }
-
+                 if (error && error.message) { errorMessage = error.message; }
                 addMessageToUI(errorMessage, 'bot-message');
-                console.error('Hata Detayı:', error); // Konsola daha detaylı yazdır
+                console.error('Hata Detayı:', error);
             } finally {
-                sendButton.disabled = false; // Buton kilidini aç
-                inputField.focus(); // Tekrar yazmaya hazır hale getir
+                sendButton.disabled = false;
+                inputField.focus();
             }
         }
 
@@ -252,51 +259,28 @@
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message ' + cssClass;
 
-            // 1. Güvenlik: Önce HTML etiketlerini engelle (XSS önlemi)
             let safeText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-            // 2. **Kalın** (Bold) formatını <strong> etiketine çevir
             safeText = safeText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-            // 3. _İtalik_ (Italic) formatını <em> etiketine çevir (İsteğe bağlı)
-            // safeText = safeText.replace(/_(.*?)_/g, '<em>$1</em>');
-
-            // 4. Yeni satırları (\n) <br> etiketine çevir
+            // safeText = safeText.replace(/_(.*?)_/g, '<em>$1</em>'); // İtalik isterseniz açabilirsiniz
             safeText = safeText.replace(/\n/g, '<br>');
 
-            // 'textContent' yerine 'innerHTML' kullanarak HTML'i ekrana bas
             messageDiv.innerHTML = safeText;
-
             messagesDiv.appendChild(messageDiv);
-            // Yeni mesaj gelince en alta kaydır (daha akıcı)
             messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
             return messageDiv;
         }
         // ----------------------------------------------------
 
-        // Enter tuşu ile gönderme
         inputField.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter' && !sendButton.disabled) { // Sadece buton aktifken çalışsın
-                sendMessage();
-            }
+            if (e.key === 'Enter' && !sendButton.disabled) { sendMessage(); }
         });
 
-        // Popup Kapatma
-        function kapatPopup() {
-            popup.style.display = 'none';
-        }
+        function kapatPopup() { popup.style.display = 'none'; }
 
-        // Sayfa Yüklendikten Sonra Popup Göster
         window.addEventListener('load', function() {
-            // Sadece ilk ziyarette veya belirli aralıklarla göstermek daha iyi olabilir
-            // Şimdilik her yüklemede 2 saniye sonra gösterelim
-            setTimeout(function() {
-                popup.style.display = 'block';
-            }, 2000);
+            setTimeout(function() { popup.style.display = 'block'; }, 2000);
         });
 
-        // İlk mesajı ekle (sayfa yüklendiğinde) - bu satırı silebiliriz, HTML'de zaten var
-        // addMessageToUI("Merhaba! Ben Dijital Aile Danışmanıyım...", 'bot-message');
     </script>
 
 </body>
