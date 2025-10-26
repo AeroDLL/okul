@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dijital Aile Danışmanı</title>
     <style>
-        /* Arayüzü güzelleştirmek için CSS kodları */
+        /* --- TEMEL ARAYÜZ STİLLERİ --- */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #f4f7f6;
@@ -39,7 +39,7 @@
         #messages {
             flex-grow: 1;
             padding: 20px;
-            overflow-y: auto; /* Mesajlar taşarsa kaydırma çubuğu çıkar */
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -49,17 +49,22 @@
             border-radius: 20px;
             line-height: 1.4;
             max-width: 75%;
+            word-wrap: break-word; /* Kelimeler taşmasın */
+        }
+        /* Kalın yazının düzgün görünmesi için */
+        .message strong {
+            font-weight: 600; /* Daha belirgin yapabiliriz */
         }
         .user-message {
             background-color: #007bff;
             color: white;
-            align-self: flex-end; /* Kullanıcı mesajları sağda */
+            align-self: flex-end;
             border-bottom-right-radius: 5px;
         }
         .bot-message {
             background-color: #e9ecef;
             color: #333;
-            align-self: flex-start; /* Bot mesajları solda */
+            align-self: flex-start;
             border-bottom-left-radius: 5px;
         }
         .loading {
@@ -80,6 +85,7 @@
             padding: 10px 15px;
             font-size: 1em;
             margin-right: 10px;
+            outline-color: #007bff; /* Tıklayınca mavi olsun */
         }
         #send-button {
             border: none;
@@ -90,9 +96,57 @@
             height: 44px;
             font-size: 1.2em;
             cursor: pointer;
+            transition: background-color 0.2s; /* Hover efekti */
+        }
+        #send-button:hover {
+            background-color: #0056b3;
         }
         #send-button:disabled {
             background-color: #aaa;
+            cursor: not-allowed;
+        }
+
+        /* --- POPUP STİLLERİ --- */
+        #features-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            z-index: 1000;
+            overflow: hidden;
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+        #popup-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #popup-header h4 { margin: 0; font-size: 1em; }
+        #popup-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            opacity: 0.8;
+            padding: 0 5px; /* Tıklama alanını biraz büyüt */
+        }
+        #popup-close:hover { opacity: 1; }
+        #popup-content { padding: 15px; }
+        #popup-content ul { list-style: none; padding-left: 0; margin: 0; }
+        #popup-content li { margin-bottom: 10px; font-size: 0.9em; }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
     </style>
 </head>
@@ -101,92 +155,149 @@
     <div id="chat-container">
         <div id="header">
             <h3>Dijital Aile Danışmanı</h3>
-            <p>UYARI: Bu bir demo projedir. Tıbbi veya yasal tavsiye vermez.</p>
+            <p>UYARI: Bu bir demo projedir. Tıbbi veya yasal tavsiye vermez.Author:Emirhan Bıçakcı</p>
         </div>
         <div id="messages">
             <div class="message bot-message">
-                Merhaba! Ben Dijital Aile Danışmanıyım. Size nasıl yardımcı olabilirim? 
-                (Lütfen unutmayın, ben sadece bir yapay zekayım ve gerçek bir uzman tavsiyesi veremem.)
+                Merhaba! Ben Dijital Aile Danışmanıyım. Size sadece psikolojik, pedagojik ve hukuki aile konularında rehberlik edebilirim.
             </div>
         </div>
         <div id="input-area">
-            <input type="text" id="message-input" placeholder="Sorunuzu yazın...">
+            <input type="text" id="message-input" placeholder="Sorunuzu yazın..." autocomplete="off">
             <button id="send-button" onclick="sendMessage()">➤</button>
         </div>
     </div>
 
+    <div id="features-popup">
+        <div id="popup-header">
+            <h4>🌟 Proje Özellikleri</h4>
+            <button id="popup-close" onclick="kapatPopup()">×</button>
+        </div>
+        <div id="popup-content">
+             <ul>
+                <li>🧠 Akıllı Gemini API Motoru</li>
+                <li>🕊️ Etik Güvenlik Filtresi (ALO 183/112)</li>
+                <li>🗣️ Duygusal Ton Algılama (Talimat Destekli)</li>
+                <li>🔒 Veri Gizliliği Garantisi (Kayıt Tutmaz)</li>
+                <li>🌍 Çoklu Dil Desteği (Potansiyel)</li>
+                <li>🧩 Uzman Yönlendirme Modülü</li>
+                <li>📊 Aile İstatistik Panosu (Gelecek Özellik)</li>
+                <li>📝 **Kalın Yazı** & Paragraf Desteği</li>
+                <li>⚙️ Özel Sunucu Logları (Admin İçin)</li>
+            </ul>
+        </div>
+    </div>
+
     <script>
-        // Frontend JavaScript Kodları
         const messagesDiv = document.getElementById('messages');
         const inputField = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
+        const popup = document.getElementById('features-popup'); // Popup'ı değişkene al
 
-        // API'mizin adresi (api.py'nin çalıştığı yer)
-        const API_URL = 'https://okul-api.onrender.com/api/mesaj';
+        // ÖNEMLİ: Bu adresi KENDİ RENDER ADRESİNİZLE DEĞİŞTİRİN
+        const API_URL = 'https://okul-api.onrender.com/api/mesaj'; // <-- KONTROL ET
 
         async function sendMessage() {
             const messageText = inputField.value.trim();
-            if (messageText === '') return; // Boş mesaj gönderme
+            if (messageText === '' || sendButton.disabled) return; // Boşsa veya buton kilitliyse gönderme
 
-            // 1. Kullanıcının mesajını ekrana ekle
             addMessageToUI(messageText, 'user-message');
-            inputField.value = ''; // Mesaj kutusunu temizle
-            sendButton.disabled = true; // Bot cevap verene kadar butonu kilitle
+            inputField.value = '';
+            sendButton.disabled = true; // Butonu kilitle
 
-            // 2. Yükleniyor... mesajı ekle
             const loadingDiv = addMessageToUI('Düşünüyorum...', 'loading');
 
             try {
-                // 3. API'ye (Backend) bağlan
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ mesaj: messageText }) // Mesajı JSON olarak gönder
+                    body: JSON.stringify({ mesaj: messageText })
                 });
 
+                // Hata mesajını daha iyi işle
                 if (!response.ok) {
-                    throw new Error('Sunucu hatası oluştu.');
+                    const errorData = await response.json().catch(() => ({ hata: 'Sunucu geçersiz yanıt verdi.' }));
+                    throw new Error(errorData.hata || 'Sunucu hatası oluştu: ' + response.status);
                 }
 
                 const data = await response.json();
-                
-                // 4. Gelen cevabı ekrana ekle
-                loadingDiv.remove(); // Yükleniyor... mesajını sil
-                addMessageToUI(data.cevap, 'bot-message');
+
+                loadingDiv.remove(); // Yükleniyor... mesajını kaldır
+                if(data.cevap) {
+                    addMessageToUI(data.cevap, 'bot-message');
+                } else {
+                    addMessageToUI(data.hata || "Bilinmeyen bir hata.", 'bot-message');
+                }
 
             } catch (error) {
-                // Hata olursa
-                loadingDiv.remove(); // Yükleniyor... mesajını sil
-                addMessageToUI('Üzgünüm, bir hata oluştu. Lütfen daha sonra tekrar deneyin.', 'bot-message');
-                console.error('Hata:', error);
+                loadingDiv.remove(); // Hata olsa bile yükleniyor... mesajını kaldır
+                let errorMessage = "Üzgünüm, bir hata oluştu. Lütfen daha sonra tekrar deneyin.";
+                 // Sunucudan gelen hata mesajını göster (eğer varsa)
+                 if (error && error.message) {
+                      errorMessage = error.message;
+                 }
+
+                addMessageToUI(errorMessage, 'bot-message');
+                console.error('Hata Detayı:', error); // Konsola daha detaylı yazdır
             } finally {
                 sendButton.disabled = false; // Buton kilidini aç
+                inputField.focus(); // Tekrar yazmaya hazır hale getir
             }
         }
 
-        // Ekrana yeni bir mesaj balonu ekleyen yardımcı fonksiyon
+        // --- GÜNCELLENMİŞ FONKSİYON (Markdown -> HTML) ---
         function addMessageToUI(text, cssClass) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message ' + cssClass;
-            messageDiv.textContent = text;
-            messagesDiv.appendChild(messageDiv);
-            
-            // Yeni mesaj gelince en alta kaydır
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            return messageDiv; // (Yükleniyor mesajını silebilmek için)
-        }
 
-        // Enter tuşuna basınca da mesajı gönder
+            // 1. Güvenlik: Önce HTML etiketlerini engelle (XSS önlemi)
+            let safeText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            // 2. **Kalın** (Bold) formatını <strong> etiketine çevir
+            safeText = safeText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+            // 3. _İtalik_ (Italic) formatını <em> etiketine çevir (İsteğe bağlı)
+            // safeText = safeText.replace(/_(.*?)_/g, '<em>$1</em>');
+
+            // 4. Yeni satırları (\n) <br> etiketine çevir
+            safeText = safeText.replace(/\n/g, '<br>');
+
+            // 'textContent' yerine 'innerHTML' kullanarak HTML'i ekrana bas
+            messageDiv.innerHTML = safeText;
+
+            messagesDiv.appendChild(messageDiv);
+            // Yeni mesaj gelince en alta kaydır (daha akıcı)
+            messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
+            return messageDiv;
+        }
+        // ----------------------------------------------------
+
+        // Enter tuşu ile gönderme
         inputField.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !sendButton.disabled) { // Sadece buton aktifken çalışsın
                 sendMessage();
             }
         });
+
+        // Popup Kapatma
+        function kapatPopup() {
+            popup.style.display = 'none';
+        }
+
+        // Sayfa Yüklendikten Sonra Popup Göster
+        window.addEventListener('load', function() {
+            // Sadece ilk ziyarette veya belirli aralıklarla göstermek daha iyi olabilir
+            // Şimdilik her yüklemede 2 saniye sonra gösterelim
+            setTimeout(function() {
+                popup.style.display = 'block';
+            }, 2000);
+        });
+
+        // İlk mesajı ekle (sayfa yüklendiğinde) - bu satırı silebiliriz, HTML'de zaten var
+        // addMessageToUI("Merhaba! Ben Dijital Aile Danışmanıyım...", 'bot-message');
     </script>
 
 </body>
-
 </html>
-
