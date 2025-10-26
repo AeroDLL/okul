@@ -28,7 +28,7 @@ SENİN 7 KURALIN VAR VE BUNLARA UYMAK ZORUNDASIN:
 
 # 4. Modeli ve Flask sunucusunu başlat
 model = genai.GenerativeModel(
-    model_name="gemini-1.5-pro",  # <--- YENİ MODEL
+    model_name="gemini-1.5-flash",  # <--- YENİ MODEL
     system_instruction=PROJE_TALIMATI
 )
 app = Flask(__name__)
@@ -56,6 +56,7 @@ def handle_mesaj():
        
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
+
 
 
 
