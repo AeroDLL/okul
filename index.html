@@ -6,7 +6,7 @@
     <title>Dijital Aile Danışmanı v1.2</title>
     <style>
         /* --- TEMEL ARAYÜZ STİLLERİ --- */
-        :root { /* Renk Değişkenleri */
+        :root { /* Renk Değişkenleri (Aynı kaldı) */
             --bg-color: #f4f7f6; --container-bg: #ffffff; --text-color: #333;
             --header-bg: #007bff; --header-text: #ffffff; --user-msg-bg: #007bff;
             --user-msg-text: #ffffff; --bot-msg-bg: #e9ecef; --bot-msg-text: #333;
@@ -32,7 +32,7 @@
             flex-direction: column; overflow: hidden; margin-bottom: 10px;
             transition: background-color 0.3s, box-shadow 0.3s;
         }
-        #header { /* ... (header stili aynı, butonlar için padding ayarı) ... */
+        #header { /* ... (header stili aynı) ... */
             padding: 15px 15px; background: var(--header-bg); color: var(--header-text);
             text-align: center; border-bottom: 1px solid var(--popup-border); flex-shrink: 0;
             display: flex; justify-content: space-between; align-items: center;
@@ -40,20 +40,18 @@
         }
         #header-title h3 { margin: 0; font-size: 1.1em; }
         #header-title p { margin: 5px 0 0; font-size: 0.8em; opacity: 0.9;}
-        /* --- HEADER BUTONLARI --- */
         .header-buttons { display: flex; align-items: center; gap: 5px; }
-        .header-button {
+        .header-button { /* ... (header-button stili aynı) ... */
              background: none; border: none; color: var(--header-text); font-size: 1.4em;
              cursor: pointer; padding: 5px; line-height: 1; opacity: 0.9;
              transition: opacity 0.2s;
         }
         .header-button:hover { opacity: 1; }
-        /* ----------------------- */
         #messages { /* ... (messages stili aynı) ... */
              flex-grow: 1; padding: 20px; overflow-y: auto; display: flex;
-             flex-direction: column; gap: 15px; scroll-behavior: smooth; /* Kaydırma efekti */
+             flex-direction: column; gap: 15px; scroll-behavior: smooth;
          }
-        .message-wrapper { /* Mesaj ve butonları gruplamak için */
+        .message-wrapper { /* ... (message-wrapper stili aynı) ... */
             display: flex; flex-direction: column; max-width: 85%;
         }
         .message-wrapper.user { align-self: flex-end; }
@@ -64,7 +62,7 @@
             word-wrap: break-word; transition: background-color 0.3s, color 0.3s;
         }
         .message strong { font-weight: 600; }
-        .message a { color: var(--link-color); text-decoration: none; font-weight: 500;} /* Linkler biraz daha belirgin */
+        .message a { color: var(--link-color); text-decoration: none; font-weight: 500;}
         .message a:hover { text-decoration: underline; }
         .user-message { /* ... (user-message stili aynı) ... */
             background-color: var(--user-msg-bg); color: var(--user-msg-text);
@@ -74,37 +72,102 @@
             background-color: var(--bot-msg-bg); color: var(--bot-msg-text);
             border-bottom-left-radius: 5px;
         }
-        /* --- YENİ: Kopyalama ve Geri Bildirim Butonları Stilleri --- */
-        .message-actions {
+        .message-actions { /* ... (message-actions stili aynı) ... */
             display: flex; align-items: center; gap: 8px; margin-top: 5px;
-            margin-left: 10px; /* Bot mesajının biraz içinde */
-            opacity: 0; /* Normalde gizli */
-            transition: opacity 0.3s ease-in-out;
-            height: 0; /* Normalde yer kaplamasın */
-            overflow: hidden;
+            margin-left: 10px; opacity: 0; transition: opacity 0.3s ease-in-out;
+            height: 0; overflow: hidden;
         }
-        .message-wrapper:hover .message-actions {
-            opacity: 1; /* Üzerine gelince göster */
-            height: auto; /* Yüksekliği otomatik ayarla */
-        }
-        .action-button, .feedback-button {
+        .message-wrapper:hover .message-actions { opacity: 1; height: auto; }
+        .action-button, .feedback-button { /* ... (action/feedback-button stilleri aynı) ... */
             background: none; border: none; padding: 2px; cursor: pointer;
             font-size: 0.9em; color: var(--icon-button-color); transition: color 0.2s;
         }
         .action-button:hover, .feedback-button:hover { color: var(--icon-button-hover); }
-        .feedback-button.active { color: var(--feedback-active-color); font-weight: bold; } /* Tıklanınca aktif renk */
+        .feedback-button.active { color: var(--feedback-active-color); font-weight: bold; }
         .copy-status { font-size: 0.8em; color: green; margin-left: 5px; }
-        /* ---------------------------------------------------- */
-        .loading { /* ... (loading stili aynı) ... */ }
-        #input-area { /* ... (input-area stili aynı) ... */ }
-        #message-input { /* ... (message-input stili aynı) ... */ }
-        #send-button { /* ... (send-button stili aynı) ... */ }
-        #features-popup { /* ... (popup stilleri aynı) ... */ }
-        #popup-header { /* ... */ } #popup-header h4 { /* ... */ } #popup-close { /* ... */ }
-        #popup-close:hover { /* ... */ } #popup-content { /* ... */ } #popup-content ul { /* ... */ }
-        #popup-content li { /* ... */ } @keyframes slideUp { /* ... */ }
-        .footer-credit { /* ... (footer stili aynı) ... */ }
-        body.dark-mode { /* Karanlık Mod Stilleri */
+        .loading { /* ... (loading stili aynı) ... */ align-self: flex-start; color: var(--footer-text); font-style: italic; }
+
+        /* --- INPUT ALANI v1.1 STİLİNE DÖNDÜ --- */
+        #input-area {
+            display: flex;
+            padding: 20px; /* v1.1'deki gibi daha fazla boşluk */
+            border-top: 1px solid var(--popup-border);
+            background-color: var(--input-area-bg);
+            flex-shrink: 0;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        #message-input {
+            flex-grow: 1;
+            border: 1px solid var(--input-border);
+            border-radius: 20px;
+            padding: 10px 15px;
+            font-size: 1em;
+            margin-right: 10px;
+            outline-color: var(--button-bg);
+            background-color: var(--container-bg);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        #send-button {
+            border: none;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border-radius: 50%;
+            width: 44px; /* v1.1'deki gibi daha büyük */
+            height: 44px;
+            font-size: 1.2em; /* v1.1'deki gibi daha büyük */
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #send-button:hover { background-color: var(--button-hover); }
+        #send-button:disabled { background-color: var(--disabled-button); cursor: not-allowed; }
+        /* ------------------------------------ */
+
+        /* --- POPUP STİLLERİ v1.1 GÖRÜNÜMÜ --- */
+        #features-popup {
+            position: fixed; bottom: 20px; right: 20px; width: 300px;
+            background-color: var(--popup-bg); color: var(--text-color);
+            border: 1px solid var(--popup-border); border-radius: 10px;
+            box-shadow: 0 5px 15px var(--popup-shadow); z-index: 1000;
+            overflow: hidden; display: none; animation: slideUp 0.5s ease-out;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        #popup-header {
+            background-color: var(--popup-header-bg); color: var(--popup-header-text);
+            padding: 10px 15px; display: flex; justify-content: space-between;
+            align-items: center; transition: background-color 0.3s;
+        }
+        #popup-header h4 { margin: 0; font-size: 1em; }
+        #popup-close {
+            background: none; border: none; color: var(--popup-header-text);
+            font-size: 20px; font-weight: bold; cursor: pointer;
+            opacity: 0.8; padding: 0 5px;
+        }
+        #popup-close:hover { opacity: 1; }
+        #popup-content { padding: 15px; }
+        /* Liste stilini v1.1 gibi basit yap */
+        #popup-content ul {
+            list-style: disc; /* Normal madde imi */
+            padding-left: 20px; /* Madde imleri için boşluk */
+            margin: 0;
+        }
+        #popup-content li {
+            margin-bottom: 8px; /* Biraz daha az boşluk */
+            font-size: 0.9em;
+        }
+        /* ------------------------------------ */
+        @keyframes slideUp { /* ... (Animasyon aynı) ... */
+             from { transform: translateY(50px); opacity: 0; }
+             to { transform: translateY(0); opacity: 1; }
+        }
+        .footer-credit { /* ... (Footer stili aynı) ... */
+            width: 100%; text-align: center; margin-top: 15px; padding-bottom: 15px;
+            font-size: 0.8em; color: var(--footer-text); transition: color 0.3s;
+        }
+        body.dark-mode { /* Karanlık Mod Stilleri (Aynı kaldı, sadece --info-text-color güncellendi) */
             --bg-color: #1a1a1a; --container-bg: #2d2d2d; --text-color: #e0e0e0;
             --header-bg: #1e88e5; --header-text: #ffffff; --user-msg-bg: #1e88e5;
             --user-msg-text: #ffffff; --bot-msg-bg: #3c3c3c; --bot-msg-text: #e0e0e0;
@@ -116,7 +179,11 @@
             --info-text-color: #adb5bd; --icon-button-color: #adb5bd; --icon-button-hover: #e0e0e0;
             --feedback-active-color: #64b5f6;
         }
-        .info-note { /* ... (info-note stili aynı) ... */ }
+        .info-note { /* ... (info-note stili aynı) ... */
+             width: 90%; max-width: 600px; text-align: center; font-size: 0.75em;
+             color: var(--info-text-color); margin-bottom: 15px; transition: color 0.3s;
+        }
+
     </style>
 </head>
 <body>
@@ -133,15 +200,14 @@
             </div>
         </div>
         <div id="messages">
-            <div class="message-wrapper bot"> <div class="message bot-message">
-                    Merhaba! Ben Dijital Aile Danışmanıyım. Size sadece psikolojik, pedagojik ve hukuki aile konularında rehberlik edebilirim.
-                </div>
-                </div>
+             <div class="message-wrapper bot">
+                 <div class="message bot-message">
+                     Merhaba! Ben Dijital Aile Danışmanıyım. Size sadece psikolojik, pedagojik ve hukuki aile konularında rehberlik edebilirim.
+                 </div>
+             </div>
         </div>
-        <div id="input-area">
-            <input type="text" id="message-input" placeholder="Sorunuzu yazın..." autocomplete="off">
-            <button id="send-button" onclick="sendMessage()">➤</button>
-        </div>
+        <div id="input-area"> <input type="text" id="message-input" placeholder="Sorunuzu yazın..." autocomplete="off">
+            <button id="send-button" onclick="sendMessage()">➤</button> </div>
     </div>
 
     <p class="info-note">
@@ -150,7 +216,8 @@
 
     <div id="features-popup">
         <div id="popup-header">
-            <h4>🌟 Proje Özellikleri (v1.2)</h4> <button id="popup-close" onclick="kapatPopup()">×</button>
+            <h4>🌟 Proje Özellikleri (v1.2)</h4>
+            <button id="popup-close" onclick="kapatPopup()">×</button>
         </div>
         <div id="popup-content">
              <ul> <li>🎨 Karanlık Mod Desteği</li>
@@ -165,15 +232,15 @@
                  <li>🧩 Spesifik Uzman Yönlendirme</li>
                  <li>📝 **Kalın Yazı** & Paragraf Desteği</li>
                  <li>📊 Aile İstatistik Panosu (Gelecek Özellik)</li>
-                 <li>⚙️ Özel Sunucu Logları (Admin İçin)</li>
-             </ul>
+                 </ul>
         </div>
     </div>
 
     <div class="footer-credit">
-        Yapımcı: Gemini ✨
+        Yapımcı: Emirhan Bıçakcı ✨
     </div>
     <script>
+        // --- JavaScript (Değişiklik Yok) ---
         const messagesDiv = document.getElementById('messages');
         const inputField = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
@@ -182,12 +249,12 @@
 
         const API_URL = 'https://okul-api.onrender.com/api/mesaj'; // <-- KONTROL ET
 
-        async function sendMessage() { /* ... (sendMessage fonksiyonu büyük ölçüde aynı) ... */
+        async function sendMessage() { /* ... (Fonksiyon aynı) ... */
              const messageText = inputField.value.trim();
              if (messageText === '' || sendButton.disabled) return;
-             addMessageToUI(messageText, 'user'); // Sınıf adını basitleştirdik
+             addMessageToUI(messageText, 'user');
              inputField.value = ''; sendButton.disabled = true;
-             const loadingDiv = addMessageToUI('Düşünüyorum...', 'bot', true); // 'true' loading olduğunu belirtir
+             const loadingDiv = addMessageToUI('Düşünüyorum...', 'bot', true);
              try {
                  const response = await fetch(API_URL, { method: 'POST', headers: {'Content-Type': 'application/json'},
                      body: JSON.stringify({ mesaj: messageText }) });
@@ -196,8 +263,8 @@
                      throw new Error(errorData.hata || 'Sunucu hatası oluştu: ' + response.status);
                  }
                  const data = await response.json();
-                 loadingDiv.remove(); // Yükleniyor mesajını kaldır
-                 if(data.cevap) { addMessageToUI(data.cevap, 'bot'); } // Sınıf adını basitleştirdik
+                 loadingDiv.remove();
+                 if(data.cevap) { addMessageToUI(data.cevap, 'bot'); }
                  else { addMessageToUI(data.hata || "Bilinmeyen bir hata.", 'bot'); }
              } catch (error) {
                  loadingDiv.remove();
@@ -205,131 +272,61 @@
                   if (error && error.message) { errorMessage = error.message; }
                  addMessageToUI(errorMessage, 'bot'); console.error('Hata Detayı:', error);
              } finally { sendButton.disabled = false; inputField.focus(); }
-         }
-
-        // --- ÇOK GÜNCELLENMİŞ FONKSİYON (Wrapper, Butonlar, Markdown) ---
-        function addMessageToUI(text, type, isLoading = false) {
-            const wrapperDiv = document.createElement('div');
-            wrapperDiv.className = `message-wrapper ${type}`; // 'user' veya 'bot'
-
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}-message`;
-
-            if (isLoading) {
-                messageDiv.classList.add('loading');
-                messageDiv.textContent = text; // "Düşünüyorum..."
-                wrapperDiv.appendChild(messageDiv); // Sadece mesajı ekle
-            } else {
-                // --- Markdown'u HTML'e Çevir ---
-                let safeText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                safeText = safeText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                safeText = safeText.replace(/\n/g, '<br>');
-                // Linkleri çevir (tel: linklerini de destekler)
-                safeText = safeText.replace(
-                    /\[(.*?)\]\((https?:\/\/[^\s\)]+|tel:[^\s\)]+)\)/g,
-                    '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
-                );
-                messageDiv.innerHTML = safeText;
-                wrapperDiv.appendChild(messageDiv); // Önce mesajı ekle
-
-                // --- Sadece BOT mesajlarına butonları ekle ---
-                if (type === 'bot') {
-                    const actionsDiv = document.createElement('div');
-                    actionsDiv.className = 'message-actions';
-
-                    // Kopyala Butonu
-                    const copyButton = document.createElement('button');
-                    copyButton.className = 'action-button copy-button';
-                    copyButton.innerHTML = '📋 <span class="copy-status"></span>'; // Kopyalandı durumu için span
-                    copyButton.title = 'Mesajı Kopyala';
-                    copyButton.onclick = (event) => {
-                        navigator.clipboard.writeText(text) // Orijinal metni kopyala
-                            .then(() => {
-                                const statusSpan = event.currentTarget.querySelector('.copy-status');
-                                statusSpan.textContent = ' Kopyalandı!';
-                                setTimeout(() => { statusSpan.textContent = ''; }, 2000); // 2 saniye sonra temizle
-                            })
-                            .catch(err => console.error('Kopyalama hatası:', err));
-                    };
-                    actionsDiv.appendChild(copyButton);
-
-                    // Geri Bildirim Butonları
-                    const feedbackLike = document.createElement('button');
-                    feedbackLike.className = 'feedback-button like';
-                    feedbackLike.textContent = '👍';
-                    feedbackLike.title = 'Yardımcı Oldu';
-                    feedbackLike.onclick = (event) => handleFeedback(event.currentTarget, 'like');
-                    actionsDiv.appendChild(feedbackLike);
-
-                    const feedbackDislike = document.createElement('button');
-                    feedbackDislike.className = 'feedback-button dislike';
-                    feedbackDislike.textContent = '👎';
-                    feedbackDislike.title = 'Yardımcı Olmadı';
-                    feedbackDislike.onclick = (event) => handleFeedback(event.currentTarget, 'dislike');
-                    actionsDiv.appendChild(feedbackDislike);
-
-                    wrapperDiv.appendChild(actionsDiv); // Butonları wrapper'a ekle
-                }
-            }
-
-            messagesDiv.appendChild(wrapperDiv); // Wrapper'ı mesaj listesine ekle
-            // Yeni mesaj gelince en alta kaydır
-            messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
-            return wrapperDiv; // Loading mesajını silmek için wrapper'ı döndür
         }
-        // ----------------------------------------------------
-
-        // --- YENİ: Geri Bildirim İşleyici ---
-        function handleFeedback(buttonElement, type) {
-            // Basitçe: Tıklanan butonu aktif yap, diğerini pasif yap
-            const wrapper = buttonElement.closest('.message-actions');
-            const likeButton = wrapper.querySelector('.like');
-            const dislikeButton = wrapper.querySelector('.dislike');
-
-            likeButton.classList.remove('active');
-            dislikeButton.classList.remove('active');
-
-            if (type === 'like') {
-                likeButton.classList.add('active');
-            } else if (type === 'dislike') {
-                dislikeButton.classList.add('active');
-            }
-            // İleride bu geri bildirimi API'ye gönderebiliriz (şimdilik sadece görsel)
-            console.log(`Geri Bildirim: ${type}`);
+        function addMessageToUI(text, type, isLoading = false) { /* ... (Fonksiyon aynı) ... */
+             const wrapperDiv = document.createElement('div');
+             wrapperDiv.className = `message-wrapper ${type}`;
+             const messageDiv = document.createElement('div');
+             messageDiv.className = `message ${type}-message`;
+             if (isLoading) {
+                 messageDiv.classList.add('loading'); messageDiv.textContent = text; wrapperDiv.appendChild(messageDiv);
+             } else {
+                 let safeText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                 safeText = safeText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                 safeText = safeText.replace(/\n/g, '<br>');
+                 safeText = safeText.replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+|tel:[^\s\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+                 messageDiv.innerHTML = safeText; wrapperDiv.appendChild(messageDiv);
+                 if (type === 'bot') {
+                     const actionsDiv = document.createElement('div'); actionsDiv.className = 'message-actions';
+                     const copyButton = document.createElement('button'); copyButton.className = 'action-button copy-button';
+                     copyButton.innerHTML = '📋 <span class="copy-status"></span>'; copyButton.title = 'Mesajı Kopyala';
+                     copyButton.onclick = (event) => { navigator.clipboard.writeText(text).then(() => {
+                         const statusSpan = event.currentTarget.querySelector('.copy-status'); statusSpan.textContent = ' Kopyalandı!';
+                         setTimeout(() => { statusSpan.textContent = ''; }, 2000); }).catch(err => console.error('Kopyalama hatası:', err)); };
+                     actionsDiv.appendChild(copyButton);
+                     const feedbackLike = document.createElement('button'); feedbackLike.className = 'feedback-button like';
+                     feedbackLike.textContent = '👍'; feedbackLike.title = 'Yardımcı Oldu';
+                     feedbackLike.onclick = (event) => handleFeedback(event.currentTarget, 'like'); actionsDiv.appendChild(feedbackLike);
+                     const feedbackDislike = document.createElement('button'); feedbackDislike.className = 'feedback-button dislike';
+                     feedbackDislike.textContent = '👎'; feedbackDislike.title = 'Yardımcı Olmadı';
+                     feedbackDislike.onclick = (event) => handleFeedback(event.currentTarget, 'dislike'); actionsDiv.appendChild(feedbackDislike);
+                     wrapperDiv.appendChild(actionsDiv);
+                 }
+             }
+             messagesDiv.appendChild(wrapperDiv); messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' }); return wrapperDiv;
         }
-        // ------------------------------------
-
-        // --- YENİ: Sohbet Temizleme Fonksiyonu ---
-        function clearChat() {
-            messagesDiv.innerHTML = ''; // Tüm mesajları sil
-            // İsteğe bağlı: İlk karşılama mesajını tekrar ekle
-             addMessageToUI(
-                 "Merhaba! Ben Dijital Aile Danışmanıyım. Size sadece psikolojik, pedagojik ve hukuki aile konularında rehberlik edebilirim.",
-                 'bot'
-             );
-             inputField.focus(); // Yazmaya hazır hale getir
+        function handleFeedback(buttonElement, type) { /* ... (Fonksiyon aynı) ... */
+             const wrapper = buttonElement.closest('.message-actions'); const likeButton = wrapper.querySelector('.like');
+             const dislikeButton = wrapper.querySelector('.dislike'); likeButton.classList.remove('active');
+             dislikeButton.classList.remove('active'); if (type === 'like') { likeButton.classList.add('active');
+             } else if (type === 'dislike') { dislikeButton.classList.add('active'); } console.log(`Geri Bildirim: ${type}`);
         }
-        // ------------------------------------
-
-        // --- Karanlık Mod Fonksiyonları --- (Aynı)
-        function toggleTheme() { /* ... */
-             document.body.classList.toggle('dark-mode');
-             if (document.body.classList.contains('dark-mode')) { themeToggleButton.textContent = '☀️'; localStorage.setItem('theme', 'dark');
-             } else { themeToggleButton.textContent = '🌙'; localStorage.setItem('theme', 'light'); }
-         }
-         function applySavedTheme() { /* ... */
-             const savedTheme = localStorage.getItem('theme');
-             if (savedTheme === 'dark') { document.body.classList.add('dark-mode'); themeToggleButton.textContent = '☀️';
-             } else { themeToggleButton.textContent = '🌙'; }
-         }
-
-        // --- Event Listener'lar --- (Aynı)
-        inputField.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter' && !sendButton.disabled) { sendMessage(); } });
+        function clearChat() { /* ... (Fonksiyon aynı) ... */
+             messagesDiv.innerHTML = ''; addMessageToUI("Merhaba! Ben Dijital Aile Danışmanıyım...", 'bot'); inputField.focus();
+        }
+        function toggleTheme() { /* ... (Fonksiyon aynı) ... */
+             document.body.classList.toggle('dark-mode'); if (document.body.classList.contains('dark-mode')) {
+             themeToggleButton.textContent = '☀️'; localStorage.setItem('theme', 'dark'); } else {
+             themeToggleButton.textContent = '🌙'; localStorage.setItem('theme', 'light'); } }
+        function applySavedTheme() { /* ... (Fonksiyon aynı) ... */
+             const savedTheme = localStorage.getItem('theme'); if (savedTheme === 'dark') {
+             document.body.classList.add('dark-mode'); themeToggleButton.textContent = '☀️'; } else {
+             themeToggleButton.textContent = '🌙'; } }
+        inputField.addEventListener('keypress', function (e) { /* ... (Fonksiyon aynı) ... */
+             if (e.key === 'Enter' && !sendButton.disabled) { sendMessage(); } });
         function kapatPopup() { popup.style.display = 'none'; }
-        window.addEventListener('load', function() {
-            applySavedTheme(); setTimeout(function() { popup.style.display = 'block'; }, 2000); });
-
+        window.addEventListener('load', function() { /* ... (Fonksiyon aynı) ... */
+             applySavedTheme(); setTimeout(function() { popup.style.display = 'block'; }, 2000); });
     </script>
 
 </body>
