@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dijital Aile Danışmanı v1.3</title>
-    <style>
-        /* --- CSS Stilleri (Hiçbir değişiklik yapılmadı) --- */
-        :root {
-            --bg-color: #f4f7f6; --container-bg: #ffffff; --text-color: #333;
+    <title>Dijital Aile Danışmanı v1.2</title> <style>
+        /* --- TEMEL ARAYÜZ STİLLERİ --- */
+        :root { /* Renk Değişkenleri */
+             /* ... (Renk değişkenleri aynı kaldı) ... */
+             --bg-color: #f4f7f6; --container-bg: #ffffff; --text-color: #333;
             --header-bg: #007bff; --header-text: #ffffff; --user-msg-bg: #007bff;
             --user-msg-text: #ffffff; --bot-msg-bg: #e9ecef; --bot-msg-text: #333;
             --input-area-bg: #f9f9f9; --input-border: #ccc; --button-bg: #007bff;
@@ -17,23 +17,25 @@
             --popup-border: #ddd; --popup-shadow: rgba(0,0,0,0.15);
             --info-text-color: #6c757d; --icon-button-color: #6c757d; --icon-button-hover: #343a40;
             --feedback-active-color: #007bff;
-            --suggestion-bg: #e0e0e0; --suggestion-text: #333; --suggestion-hover-bg: #c0c0c0;
+            --suggestion-bg: #e0e0e0; /* Yeni: Öneri Butonu Rengi */
+            --suggestion-text: #333;
+            --suggestion-hover-bg: #c0c0c0;
         }
-        body {
+        body { /* ... (body stili aynı) ... */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color); color: var(--text-color); margin: 0;
             padding: 20px 0; display: flex; flex-direction: column;
             justify-content: center; align-items: center; min-height: 100vh;
             box-sizing: border-box; transition: background-color 0.3s, color 0.3s;
         }
-        #chat-container {
+        #chat-container { /* ... (chat-container stili aynı) ... */
             width: 90%; max-width: 600px; height: 80vh; max-height: 700px;
             background-color: var(--container-bg); border-radius: 12px;
             box-shadow: 0 4px 12px var(--shadow-color); display: flex;
             flex-direction: column; overflow: hidden; margin-bottom: 10px;
             transition: background-color 0.3s, box-shadow 0.3s;
         }
-        #header {
+        #header { /* ... (header stili aynı) ... */
              padding: 15px 15px; background: var(--header-bg); color: var(--header-text);
              text-align: center; border-bottom: 1px solid var(--popup-border); flex-shrink: 0;
              display: flex; justify-content: space-between; align-items: center;
@@ -42,84 +44,69 @@
         #header-title h3 { margin: 0; font-size: 1.1em; }
         #header-title p { margin: 5px 0 0; font-size: 0.8em; opacity: 0.9;}
         .header-buttons { display: flex; align-items: center; gap: 5px; }
-        .header-button {
-             background: none; border: none; color: var(--header-text); font-size: 1.4em;
-             cursor: pointer; padding: 5px; line-height: 1; opacity: 0.9;
-             transition: opacity 0.2s;
-        }
-        .header-button:hover { opacity: 1; }
-        #messages {
-             flex-grow: 1; padding: 20px; overflow-y: auto; display: flex;
-             flex-direction: column; gap: 15px; scroll-behavior: smooth;
-         }
-        .message-wrapper { display: flex; flex-direction: column; max-width: 85%; }
-        .message-wrapper.user { align-self: flex-end; } .message-wrapper.bot { align-self: flex-start; }
-        .message {
-            padding: 10px 15px; border-radius: 18px; line-height: 1.4;
-            word-wrap: break-word; transition: background-color 0.3s, color 0.3s;
-        }
-        .message strong { font-weight: 600; }
-        .message a { color: var(--link-color); text-decoration: none; font-weight: 500;}
-        .message a:hover { text-decoration: underline; }
-        .user-message {
-            background-color: var(--user-msg-bg); color: var(--user-msg-text);
-            border-bottom-right-radius: 5px;
-        }
-        .bot-message {
-            background-color: var(--bot-msg-bg); color: var(--bot-msg-text);
-            border-bottom-left-radius: 5px;
-        }
-        .message-actions {
-            display: flex; align-items: center; gap: 8px; margin-top: 5px;
-            margin-left: 10px; opacity: 0; transition: opacity 0.3s ease-in-out;
-            height: 0; overflow: hidden;
-        }
-        .message-wrapper:hover .message-actions { opacity: 1; height: auto; }
-        .action-button, .feedback-button {
-            background: none; border: none; padding: 2px; cursor: pointer;
-            font-size: 0.9em; color: var(--icon-button-color); transition: color 0.2s;
-        }
-        .action-button:hover, .feedback-button:hover { color: var(--icon-button-hover); }
-        .feedback-button.active { color: var(--feedback-active-color); font-weight: bold; }
-        .copy-status { font-size: 0.8em; color: green; margin-left: 5px; }
-        .loading { align-self: flex-start; color: var(--footer-text); font-style: italic; }
-        #input-area {
-            display: flex; padding: 15px; border-top: 1px solid var(--popup-border);
-            background-color: var(--input-area-bg); flex-shrink: 0;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        #message-input {
-            flex-grow: 1; border: 1px solid var(--input-border); border-radius: 20px;
-            padding: 10px 15px; font-size: 1em; margin-right: 10px;
-            outline-color: var(--button-bg); background-color: var(--container-bg);
-            color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
-        #send-button {
-            border: none; background-color: var(--button-bg); color: var(--button-text);
-            border-radius: 50%; width: 40px; height: 40px; font-size: 1.1em;
-            cursor: pointer; transition: background-color 0.2s; display: flex;
-            align-items: center; justify-content: center;
-        }
-        #send-button:hover { background-color: var(--button-hover); }
-        #send-button:disabled { background-color: var(--disabled-button); cursor: not-allowed; }
-        #features-popup { /* ... (Popup stilleri aynı) ... */ }
+        .header-button { /* ... (header-button stili aynı) ... */ }
+        #messages { /* ... (messages stili aynı) ... */ }
+        .message-wrapper { /* ... (message-wrapper stili aynı) ... */ }
+        .message-wrapper.user { /* ... */ } .message-wrapper.bot { /* ... */ }
+        .message { /* ... (message stili aynı) ... */ }
+        .message strong { /* ... */ } .message a { /* ... */ } .message a:hover { /* ... */ }
+        .user-message { /* ... (user-message stili aynı) ... */ }
+        .bot-message { /* ... (bot-message stili aynı) ... */ }
+        .message-actions { /* ... (message-actions stili aynı) ... */ }
+        .message-wrapper:hover .message-actions { /* ... */ }
+        .action-button, .feedback-button { /* ... (action/feedback stilleri aynı) ... */ }
+        .action-button:hover, .feedback-button:hover { /* ... */ }
+        .feedback-button.active { /* ... */ } .copy-status { /* ... */ }
+        .loading { /* ... (loading stili aynı) ... */ }
+        #input-area { /* ... (input-area stili aynı) ... */ }
+        #message-input { /* ... (message-input stili aynı) ... */ }
+        #send-button { /* ... (send-button stili aynı) ... */ }
+        #features-popup { /* ... (popup stilleri aynı) ... */ }
         #popup-header { /* ... */ } #popup-header h4 { /* ... */ } #popup-close { /* ... */ }
         #popup-close:hover { /* ... */ } #popup-content { /* ... */ }
-        #popup-content ul { list-style: disc; padding-left: 20px; margin: 0; }
-        #popup-content li { margin-bottom: 8px; font-size: 0.9em; }
-        @keyframes slideUp { /* ... */ }
-        .footer-credit { /* ... (Footer stili aynı) ... */ }
-        #suggested-topics { /* ... (Öneri stilleri aynı) ... */
-             padding: 5px 0 10px 10px; display: flex; flex-wrap: wrap; gap: 8px;
-         }
-         .suggestion-button { /* ... */
-             background-color: var(--suggestion-bg); color: var(--suggestion-text); border: none;
-             border-radius: 15px; padding: 6px 12px; font-size: 0.85em; cursor: pointer;
-             transition: background-color 0.2s;
-         }
-         .suggestion-button:hover { background-color: var(--suggestion-hover-bg); }
-        body.dark-mode { /* Karanlık Mod Stilleri (Aynı kaldı) */ }
+        #popup-content ul { /* ... (liste stili v1.1 gibi) ... */ list-style: disc; padding-left: 20px; margin: 0; }
+        #popup-content li { /* ... (liste stili v1.1 gibi) ... */ margin-bottom: 8px; font-size: 0.9em; }
+        @keyframes slideUp { /* ... (Animasyon aynı) ... */ }
+        .footer-credit { /* ... (footer stili aynı) ... */ }
+
+        /* --- YENİ: Konu Başlıkları Stilleri --- */
+        #suggested-topics {
+            padding: 5px 0 10px 10px; /* Mesajların soluna hizalı gibi */
+            display: flex;
+            flex-wrap: wrap; /* Butonlar sığmazsa alt satıra geçsin */
+            gap: 8px; /* Butonlar arası boşluk */
+        }
+        .suggestion-button {
+            background-color: var(--suggestion-bg);
+            color: var(--suggestion-text);
+            border: none;
+            border-radius: 15px; /* Yuvarlak köşeler */
+            padding: 6px 12px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .suggestion-button:hover {
+            background-color: var(--suggestion-hover-bg);
+        }
+        /* ------------------------------------ */
+
+        body.dark-mode { /* Karanlık Mod Stilleri */
+             /* ... (Karanlık Mod renkleri aynı) ... */
+             --bg-color: #1a1a1a; --container-bg: #2d2d2d; --text-color: #e0e0e0;
+            --header-bg: #1e88e5; --header-text: #ffffff; --user-msg-bg: #1e88e5;
+            --user-msg-text: #ffffff; --bot-msg-bg: #3c3c3c; --bot-msg-text: #e0e0e0;
+            --input-area-bg: #252525; --input-border: #444; --button-bg: #1e88e5;
+            --button-text: #ffffff; --button-hover: #1565c0; --disabled-button: #555;
+            --link-color: #64b5f6; --footer-text: #777; --shadow-color: rgba(0, 0, 0, 0.2);
+            --popup-header-bg: #1e88e5; --popup-header-text: #ffffff; --popup-bg: #2d2d2d;
+            --popup-border: #444; --popup-shadow: rgba(0,0,0,0.3);
+            --info-text-color: #adb5bd; --icon-button-color: #adb5bd; --icon-button-hover: #e0e0e0;
+            --feedback-active-color: #64b5f6;
+            --suggestion-bg: #444; /* Koyu tema öneri butonu */
+            --suggestion-text: #e0e0e0;
+            --suggestion-hover-bg: #555;
+        }
         .info-note { /* ... (info-note stili aynı) ... */ }
     </style>
 </head>
@@ -148,7 +135,7 @@
                  <button class="suggestion-button" onclick="handleSuggestionClick(this)">Boşanma sürecinde ne yapmalıyım?</button>
                  <button class="suggestion-button" onclick="handleSuggestionClick(this)">Ergenlik dönemi zorlukları</button>
              </div>
-        </div>
+             </div>
         <div id="input-area">
             <input type="text" id="message-input" placeholder="Sorunuzu yazın..." autocomplete="off">
             <button id="send-button" onclick="sendMessage()">➤</button>
@@ -161,8 +148,7 @@
 
     <div id="features-popup">
         <div id="popup-header">
-            <h4>🌟 Proje Özellikleri (v1.2)</h4>
-            <button id="popup-close" onclick="kapatPopup()">×</button>
+            <h4>🌟 Proje Özellikleri (v1.3)</h4> <button id="popup-close" onclick="kapatPopup()">×</button>
         </div>
         <div id="popup-content">
              <ul>
@@ -192,25 +178,28 @@
         const sendButton = document.getElementById('send-button');
         const popup = document.getElementById('features-popup');
         const themeToggleButton = document.getElementById('theme-toggle');
-        const suggestedTopicsDiv = document.getElementById('suggested-topics');
+        const suggestedTopicsDiv = document.getElementById('suggested-topics'); // Yeni
 
         const API_URL = 'https://okul-api.onrender.com/api/mesaj'; // <-- KONTROL ET
 
+        // --- sendMessage GÜNCELLENDİ (Opsiyonel mesaj parametresi) ---
         async function sendMessage(messageToSend = null) {
+            // Eğer parametre olarak mesaj gelmediyse input'tan al
             const messageText = messageToSend !== null ? messageToSend : inputField.value.trim();
+
             if (messageText === '' || sendButton.disabled) return;
 
+            // Eğer input'tan alındıysa kullanıcı mesajı olarak ekle ve input'u temizle
+            // (Öneri tıklandıysa zaten handleSuggestionClick ekledi)
             if (messageToSend === null) {
                 addMessageToUI(messageText, 'user');
                 inputField.value = '';
             }
 
-            // --- YENİ EKLENEN SATIR ---
-            inputField.blur(); // Odak input'tan kaldırılır, klavye kapanır.
-            // -------------------------
-
-            sendButton.disabled = true;
+            sendButton.disabled = true; // Butonu kilitle
+            // Öneri butonlarına tıklandıysa onları gizle
             if (suggestedTopicsDiv) suggestedTopicsDiv.style.display = 'none';
+
 
             const loadingDiv = addMessageToUI('Düşünüyorum...', 'bot', true);
             try {
@@ -230,16 +219,28 @@
                  if (error && error.message) { errorMessage = error.message; }
                 addMessageToUI(errorMessage, 'bot'); console.error('Hata Detayı:', error);
             } finally {
-                sendButton.disabled = false;
-                // inputField.focus(); // <-- Eskiden buradaydı, artık klavyeyi hemen açmasın.
-                // İsteğe bağlı: Belki kullanıcı input'a dokunduğunda focus vermek daha iyi olabilir.
+                sendButton.disabled = false; // Kilidi aç
+                inputField.focus();
             }
         }
+        // ----------------------------------------------------
 
-        function handleSuggestionClick(buttonElement) { /* ... (Fonksiyon aynı) ... */ }
+        // --- YENİ: Öneri Butonu Tıklama İşleyici ---
+        function handleSuggestionClick(buttonElement) {
+            const topic = buttonElement.textContent; // Butonun metnini al
+            addMessageToUI(topic, 'user'); // Kullanıcı yazmış gibi ekle
+            sendMessage(topic); // Alınan metni doğrudan gönder
+        }
+        // -----------------------------------------
+
         function addMessageToUI(text, type, isLoading = false) { /* ... (Fonksiyon aynı) ... */ }
         function handleFeedback(buttonElement, type) { /* ... (Fonksiyon aynı) ... */ }
-        function clearChat() { /* ... (Fonksiyon aynı) ... */ }
+        function clearChat() { /* ... (Fonksiyon aynı, öneri butonlarını tekrar gösterebiliriz) ... */
+             messagesDiv.innerHTML = ''; // Tüm mesajları sil
+             addMessageToUI("...", 'bot'); // İlk mesajı tekrar ekle
+             if (suggestedTopicsDiv) suggestedTopicsDiv.style.display = 'flex'; // Önerileri tekrar göster
+             inputField.focus();
+         }
         function toggleTheme() { /* ... (Fonksiyon aynı) ... */ }
         function applySavedTheme() { /* ... (Fonksiyon aynı) ... */ }
         inputField.addEventListener('keypress', function (e) { /* ... (Fonksiyon aynı) ... */ });
