@@ -1,3 +1,8 @@
+# --- api.py ---
+# SON GÜNCELLEME: 29 Ekim 2025 (v1.3 - Nihai Talimatlar + Loglama Düzeltmesi)
+# Özellikler: Doğal Konuşma, Acil Numaraları Direkt Aratma, Spesifik Kaynak Önerileri,
+#            Konu Kısıtlama, Empatik Dinleme & Duygu Takibi, Loglama, İstemci Hata Loglama
+
 import os
 import google.generativeai as genai
 from flask import Flask, request, jsonify
@@ -15,7 +20,7 @@ try:
 except Exception as e:
     raise ConnectionError(f"Google API bağlantısı kurulamadı: {e}")
 
-# 3. Modelin Karakterini (Sistem Talimatı)
+# 3. Modelin Karakterini (Sistem Talimatı) - NIHAI SÜRÜM v1.3
 PROJE_TALIMATI = """
 **SENİN KİMLİĞİN VE AMACIN:**
 Sen, **'Dijital Aile Danışmanı'** adlı bir yapay zekâ destekli sohbet botusun. Amacın, ailelerin veya bireylerin yaşadığı **psikolojik, pedagojik (çocuk/eğitim) veya hukuki aile sorunlarında** onlara **ilk aşamada rehberlik etmek**, onları dinlemek ve **doğru yerlere yönlendirmektir**. Konuşma tarzın **sıcak, empatik, anlayışlı ve mümkün olduğunca doğal, bir arkadaş gibi** olmalı. Robot gibi konuşmaktan kaçın.
@@ -58,30 +63,28 @@ Sen, **'Dijital Aile Danışmanı'** adlı bir yapay zekâ destekli sohbet botus
 """
 
 # 4. Modeli ve Flask sunucusunu başlat
+# ÖNEMLİ: Model adının, Google Projenizde ETKİN olan ve çalışan bir model olduğundan emin olun!
+# Daha önce 'gemini-1.5-pro' veya 'gemini-1.0-pro' çalışmıştı.
+# 'gemini-2.5-flash' hata veriyorsa, aşağıdaki satırı çalışan modelle değiştirin.
 try:
     model = genai.GenerativeModel(
-        model_name="gemini-2.5-flash",
+        model_name="gemini-1.5-pro", # <-- ÇALIŞAN MODELİ BURAYA YAZIN (örn: gemini-1.5-pro veya gemini-1.0-pro)
         system_instruction=PROJE_TALIMATI
     )
 except Exception as e:
-    raise ValueError(f"Google Modeli başlatılamadı: {e}")
+    raise ValueError(f"Google Modeli başlatılamadı: {e}. Model adı doğru mu ve Google projenizde etkin mi?")
 
 app = Flask(__name__)
 CORS(app)
 
-# --- YENİ: LOG FORMATINI AYARLA ---
-# Gunicorn kendi zaman damgasını eklediği için, formatımızdan zamanı çıkarabiliriz.
-# Daha basit ve okunur bir format tanımlayalım.
+# --- LOG FORMATINI AYARLA ---
 log_format = "[DANISMAN_BOT] [%(levelname)s] %(message)s"
 formatter = logging.Formatter(log_format)
-
-# Flask'ın varsayılan logger'ına bu formatı uygula
-# (Render logları stdout'a yazdığı için handler eklemeye gerek yok)
 app.logger.handlers[0].setFormatter(formatter)
 app.logger.setLevel(logging.INFO)
 # ----------------------------------
 
-# 5. API Rotası (Endpoint)
+# 5. API Rotası (Endpoint) - /api/mesaj
 @app.route('/api/mesaj', methods=['POST'])
 def handle_mesaj():
     kullanici_mesaji = ""
@@ -96,63 +99,58 @@ def handle_mesaj():
             app.logger.warning("Boş mesaj alındı.")
             return jsonify({"hata": "Mesaj boş olamaz."}), 400
 
-        # --- LOG MESAJI DEĞİŞTİ ---
-        # Başına [DANISMAN_BOT] [INFO] otomatik gelecek
         app.logger.info(f"USER >> {kullanici_mesaji}")
-        # ---------------------------
 
         response = model.generate_content(kullanici_mesaji)
 
         try:
-            bot_cevabi = response.text
-        except ValueError:
-            bot_cevabi = "[Model güvenlik nedeniyle cevap vermedi]"
-            app.logger.warning("Model güvenlik nedeniyle boş cevap döndü.")
+            # Cevabı alırken güvenlik bloklamasını kontrol et
+            if not response.parts:
+                 bot_cevabi = "[Model güvenlik nedeniyle veya başka bir sebeple cevap vermedi]"
+                 # Güvenlik geri bildirimini logla (daha detaylı bilgi için)
+                 app.logger.warning(f"Model boş cevap döndü. Sebep: {response.prompt_feedback}")
+            else:
+                 bot_cevabi = response.text
+        except ValueError as ve: # Özellikle güvenlik bloklaması bu hatayı verebilir
+            bot_cevabi = "[İçerik güvenlik politikaları nedeniyle engellendi]"
+            app.logger.warning(f"Model (ValueError) güvenlik nedeniyle cevap vermedi: {ve}")
         except AttributeError:
              bot_cevabi = "[Cevap formatı beklenenden farklı]"
              app.logger.warning("Model cevabının formatı beklenenden farklı.")
+        except Exception as inner_e: # Beklenmedik diğer hatalar
+             bot_cevabi = "[Modelden cevap alınırken bir hata oluştu]"
+             app.logger.error(f"Model.generate_content sonrası hata: {inner_e}")
 
-        # --- LOG MESAJI DEĞİŞTİ ---
-        # Bot cevabını daha okunaklı loglamak için başına girinti ekleyelim
-        # Çok satırlı cevapları da loglayalım
-        log_bot_cevabi = bot_cevabi.replace('\n', '\n[DANISMAN_BOT] [INFO]       ') # Girinti
+
+        log_bot_cevabi = bot_cevabi.replace('\n', '\n[DANISMAN_BOT] [INFO]       ')
         app.logger.info(f"BOT <<\n[DANISMAN_BOT] [INFO]       {log_bot_cevabi}")
-        # ---------------------------
 
         return jsonify({"cevap": bot_cevabi})
 
     except Exception as e:
-        # --- LOG MESAJI DEĞİŞTİ ---
         app.logger.error(f"HATA! USER: '{kullanici_mesaji}' | ERROR: {str(e)}")
-        # ---------------------------
-
         error_message = "Yapay zeka sunucusunda bir sorun oluştu. Lütfen daha sonra tekrar deneyin."
         return jsonify({"hata": error_message}), 500
-        # --- YENİ: İstemci Hatalarını Loglama Endpoint'i ---
+
+# 6. API Rotası (Endpoint) - /api/log_error (İstemci Hataları İçin)
 @app.route('/api/log_error', methods=['POST'])
 def log_client_error():
     try:
         error_data = request.get_json()
-        if error_data and 'error' in error_data:
-            # İstemciden gelen hatayı sunucu loglarına [ERROR] seviyesinde yazdır
-            # Başına [CLIENT_ERROR] etiketi ekleyelim ki ayırt edilsin
+        # --- DÜZELTME: 'error' yerine 'message' kontrolü ---
+        if error_data and 'message' in error_data:
+        # --------------------------------------------------
             app.logger.error(f"[CLIENT_ERROR] Tarayıcı Hatası: {error_data.get('message', 'Mesaj yok')} | Detay: {error_data.get('details', 'Detay yok')}")
             return jsonify({"status": "error logged"}), 200
         else:
             app.logger.warning("[CLIENT_ERROR] Geçersiz hata loglama isteği alındı.")
             return jsonify({"status": "invalid error data"}), 400
     except Exception as e:
-        # Bu endpoint'in kendisi hata verirse onu da logla
         app.logger.error(f"[LOG_ENDPOINT_ERROR] Hata loglarken hata oluştu: {str(e)}")
         return jsonify({"status": "logging failed"}), 500
-# --------------------------------------------------
 
-
+# Bu kısım sadece 'python api.py' ile çalıştırıldığında kullanılır.
 if __name__ == '__main__':
-    app.run(debug=True, port=5000) # Debug=True yerel test içindir
-
-
-
-
-
-
+    # Render'da Gunicorn kullanıldığı için debug=False yapmak daha doğrudur.
+    # Ancak yerel test için True bırakılabilir.
+    app.run(debug=True, port=5000)
