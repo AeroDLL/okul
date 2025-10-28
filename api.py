@@ -128,9 +128,29 @@ def handle_mesaj():
 
         error_message = "Yapay zeka sunucusunda bir sorun oluştu. Lütfen daha sonra tekrar deneyin."
         return jsonify({"hata": error_message}), 500
+        # --- YENİ: İstemci Hatalarını Loglama Endpoint'i ---
+@app.route('/api/log_error', methods=['POST'])
+def log_client_error():
+    try:
+        error_data = request.get_json()
+        if error_data and 'error' in error_data:
+            # İstemciden gelen hatayı sunucu loglarına [ERROR] seviyesinde yazdır
+            # Başına [CLIENT_ERROR] etiketi ekleyelim ki ayırt edilsin
+            app.logger.error(f"[CLIENT_ERROR] Tarayıcı Hatası: {error_data.get('message', 'Mesaj yok')} | Detay: {error_data.get('details', 'Detay yok')}")
+            return jsonify({"status": "error logged"}), 200
+        else:
+            app.logger.warning("[CLIENT_ERROR] Geçersiz hata loglama isteği alındı.")
+            return jsonify({"status": "invalid error data"}), 400
+    except Exception as e:
+        # Bu endpoint'in kendisi hata verirse onu da logla
+        app.logger.error(f"[LOG_ENDPOINT_ERROR] Hata loglarken hata oluştu: {str(e)}")
+        return jsonify({"status": "logging failed"}), 500
+# --------------------------------------------------
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000) # Debug=True yerel test içindir
+
 
 
 
