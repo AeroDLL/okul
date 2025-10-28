@@ -68,7 +68,7 @@ Sen, **'Dijital Aile Danışmanı'** adlı bir yapay zekâ destekli sohbet botus
 # 'gemini-2.5-flash' hata veriyorsa, aşağıdaki satırı çalışan modelle değiştirin.
 try:
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-pro", # <-- ÇALIŞAN MODELİ BURAYA YAZIN (örn: gemini-1.5-pro veya gemini-1.0-pro)
+        model_name="gemini-2.5-flash", # <-- ÇALIŞAN MODELİ BURAYA YAZIN (örn: gemini-1.5-pro veya gemini-1.0-pro)
         system_instruction=PROJE_TALIMATI
     )
 except Exception as e:
@@ -154,3 +154,4 @@ if __name__ == '__main__':
     # Render'da Gunicorn kullanıldığı için debug=False yapmak daha doğrudur.
     # Ancak yerel test için True bırakılabilir.
     app.run(debug=True, port=5000)
+
