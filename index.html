@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dijital Aile Danışmanı</title>
+    <title>Dijital Aile Danışmanı v1.3</title>
     <style>
         :root {
             --bg-color: #f4f7f6; --container-bg: #fff; --text-color: #333;
@@ -130,6 +130,38 @@
         }
         #popup-content ul { list-style: disc; padding-left: 20px; margin: 0;}
         #popup-content li { margin-bottom: 8px; font-size: 0.95em; }
+        /* Mini baloncuk stilleri */
+        #mini-feature-balloon {
+            display: none;
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 1200;
+            background: var(--popup-bg);
+            color: var(--text-color);
+            box-shadow: 0 2px 12px var(--popup-shadow);
+            border: 1px solid var(--popup-border);
+            border-radius: 14px;
+            padding: 15px 22px 15px 18px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: box-shadow 0.2s, background 0.2s;
+            max-width: 300px;
+            min-width: 180px;
+            animation: miniBalloonPop 0.5s;
+        }
+        #mini-feature-balloon .mini-close {
+            position: absolute; top: 2px; right: 7px;
+            font-size: 1.2em; background: none; border: none; color: #aaa; cursor: pointer;
+        }
+        #mini-feature-balloon .mini-close:hover { color: #e00; }
+        #mini-feature-balloon .mini-balloon-title {
+            font-weight: bold; margin-bottom: 4px; display: flex; align-items: center; gap: 7px;
+        }
+        #mini-feature-balloon .mini-balloon-title .star { font-size: 1.2em; }
+        #mini-feature-balloon ul { margin: 7px 0 0 15px; padding: 0; font-size: 0.97em;}
+        #mini-feature-balloon li { margin-bottom: 2px;}
+        @keyframes miniBalloonPop { from { transform: scale(0.8); opacity:0; } to { transform: scale(1); opacity:1; } }
         .footer-credit { color: var(--footer-text); font-size: 0.93em; text-align: center; margin-top: 15px;}
         .info-note { color: var(--info-text-color); font-size: 0.91em; text-align: center; margin: 10px auto 0;}
         body.dark-mode {
@@ -166,6 +198,19 @@
     <p class="info-note">
         Not: Ücretsiz sunucu kullanıldığı için ilk yanıt biraz gecikebilir. Anlayışınız için teşekkürler.
     </p>
+    <!-- Mini Özellikler Balonu -->
+    <div id="mini-feature-balloon">
+        <button class="mini-close" title="Kapat">×</button>
+        <div class="mini-balloon-title"><span class="star">✨</span> Yeni Özellikler!</div>
+        <ul>
+            <li>Karanlık Mod</li>
+            <li>Empatik Gemini API</li>
+            <li>Mesaj Kopyalama</li>
+            <li>Sohbet Temizleme</li>
+        </ul>
+        <div style="font-size:0.92em; color:#777; margin-top:4px;">Detaylar için tıkla!</div>
+    </div>
+    <!-- Büyük Özellikler Popup -->
     <div id="features-popup">
         <div>
             <div id="popup-header">
@@ -202,9 +247,10 @@
         const popupCloseBtn = document.getElementById('popup-close');
         const themeToggleButton = document.getElementById('theme-toggle');
         const clearChatBtn = document.getElementById('clear-chat');
+        const miniBalloon = document.getElementById('mini-feature-balloon');
+        const miniBalloonClose = miniBalloon.querySelector('.mini-close');
         const API_URL = 'https://okul-api.onrender.com/api/mesaj';
 
-        // İlk mesajı ekle
         function showWelcome() {
             addMessageToUI("Merhaba! Ben Dijital Aile Danışmanıyım. Size sadece psikolojik, pedagojik ve hukuki aile konularında rehberlik edebilirim.", 'bot');
         }
@@ -225,12 +271,9 @@
                 safeText = safeText.replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+|tel:[^\s\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
                 messageDiv.innerHTML = safeText;
                 wrapperDiv.appendChild(messageDiv);
-                // Butonlar sadece bot mesajında
                 if (type === 'bot') {
                     const actionsDiv = document.createElement('div');
                     actionsDiv.className = 'message-actions';
-
-                    // Kopyala butonu
                     const copyButton = document.createElement('button');
                     copyButton.className = 'action-button copy-button';
                     copyButton.innerHTML = '📋 <span class="copy-status"></span>';
@@ -243,23 +286,18 @@
                         }).catch(err => alert('Kopyalama hatası: ' + err));
                     };
                     actionsDiv.appendChild(copyButton);
-
-                    // Beğen butonu
                     const feedbackLike = document.createElement('button');
                     feedbackLike.className = 'feedback-button like';
                     feedbackLike.textContent = '👍';
                     feedbackLike.title = 'Yardımcı Oldu';
                     feedbackLike.onclick = (event) => handleFeedback(event.currentTarget, 'like');
                     actionsDiv.appendChild(feedbackLike);
-
-                    // Beğenme butonu
                     const feedbackDislike = document.createElement('button');
                     feedbackDislike.className = 'feedback-button dislike';
                     feedbackDislike.textContent = '👎';
                     feedbackDislike.title = 'Yardımcı Olmadı';
                     feedbackDislike.onclick = (event) => handleFeedback(event.currentTarget, 'dislike');
                     actionsDiv.appendChild(feedbackDislike);
-
                     wrapperDiv.appendChild(actionsDiv);
                 }
             }
@@ -269,7 +307,6 @@
         }
 
         function handleFeedback(buttonElement, type) {
-            // Sadece aktif/deaktif gösterimi için
             const container = buttonElement.parentElement;
             const like = container.querySelector('.like');
             const dislike = container.querySelector('.dislike');
@@ -277,7 +314,6 @@
             dislike.classList.remove('active');
             if (type === 'like') like.classList.add('active');
             if (type === 'dislike') dislike.classList.add('active');
-            // Sunucuya bildirim göndermek istiyorsan burada fetch ile gönderebilirsin
         }
 
         async function sendMessage() {
@@ -313,14 +349,12 @@
             }
         }
 
-        // Sohbeti temizle
         function clearChat() {
             messagesDiv.innerHTML = '';
             showWelcome();
             inputField.focus();
         }
 
-        // Tema
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             localStorage.setItem('chat-theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -337,13 +371,23 @@
             }
         }
 
-        // Özellikler popup - Süper popup mantığı
+        // Mini balonun açılması (ilk girişte ve popup kapanınca tekrar göster)
+        function showMiniBalloon() {
+            miniBalloon.style.display = 'block';
+        }
+        function hideMiniBalloon() {
+            miniBalloon.style.display = 'none';
+        }
+
+        // Büyük popup açılır
         function openPopup() {
             popup.classList.add('active');
+            hideMiniBalloon();
         }
+        // Büyük popup kapanır, mini balon tekrar gösterilir
         function closePopup() {
             popup.classList.remove('active');
-            localStorage.setItem('features-popup-seen', 'yes');
+            showMiniBalloon();
         }
 
         // Enter ile gönder
@@ -351,26 +395,27 @@
             if (e.key === 'Enter') sendMessage();
         });
 
-        // Eventler
         sendButton.onclick = sendMessage;
         clearChatBtn.onclick = clearChat;
         themeToggleButton.onclick = toggleTheme;
         popupBtn.onclick = openPopup;
         popupCloseBtn.onclick = closePopup;
-
-        // Sayfa ilk açılışında popup otomatik açılır, kullanıcı kapatınca bir daha otomatik açılmaz
+        miniBalloon.onclick = function(e){
+            // Sadece kendi kapatma butonuna tıklamadıysan popup aç
+            if(!e.target.classList.contains('mini-close')) openPopup();
+        };
+        miniBalloonClose.onclick = function(e){
+            e.stopPropagation();
+            miniBalloon.style.display = 'none';
+        };
+        // Büyük popup dışında bir yere tıklayınca kapanır
+        popup.addEventListener('click', function(e) {
+            if (e.target === popup) closePopup();
+        });
         window.addEventListener('load', function () {
             applySavedTheme();
             showWelcome();
-            // Süper popup: daha önce görülmediyse göster
-            if (localStorage.getItem('features-popup-seen') !== 'yes') {
-                setTimeout(openPopup, 250); // hafif gecikmeli açılır
-            }
-        });
-
-        // Popup dışında bir yere tıklayınca kapansın
-        popup.addEventListener('click', function(e) {
-            if (e.target === popup) closePopup();
+            setTimeout(showMiniBalloon, 500); // Sayfa açılışında minik balon göster
         });
     </script>
 </body>
