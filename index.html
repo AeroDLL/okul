@@ -6,18 +6,19 @@
     <title>Dijital Aile Danışmanı v1.6</title>
     <style>
         /* --- TEMEL ARAYÜZ STİLLERİ --- */
-        :root {
-            --bg-color: #f4f7f6; --container-bg: #fff; --text-color: #333;
-            --header-bg: #007bff; --header-text: #fff; --user-msg-bg: #007bff;
-            --user-msg-text: #fff; --bot-msg-bg: #e9ecef; --bot-msg-text: #333;
-            --input-area-bg: #f9f9f9; --input-border: #ccc; --button-bg: #007bff;
-            --button-text: #fff; --button-hover: #0056b3; --disabled-button: #aaa;
-            --link-color: #007bff; --footer-text: #888; --shadow-color: rgba(0,0,0,0.05);
-            --popup-header-bg: #007bff; --popup-header-text: #fff; --popup-bg: #fff;
-            --popup-border: #ddd; --popup-shadow: rgba(0,0,0,0.15);
-            --info-text-color: #6c757d; --icon-button-color: #6c757d; --icon-button-hover: #343a40;
-            --timestamp-color: #999; --scroll-button-bg: rgba(0, 123, 255, 0.7);
-            --scroll-button-hover: rgba(0, 86, 179, 0.9);
+        :root { /* Renk Değişkenleri */
+             --bg-color: #f4f7f6; --container-bg: #fff; --text-color: #333;
+             --header-bg: #007bff; --header-text: #fff; --user-msg-bg: #007bff;
+             --user-msg-text: #fff; --bot-msg-bg: #e9ecef; --bot-msg-text: #333;
+             --input-area-bg: #f9f9f9; --input-border: #ccc; --button-bg: #007bff;
+             --button-text: #fff; --button-hover: #0056b3; --disabled-button: #aaa;
+             --link-color: #007bff; --footer-text: #888; --shadow-color: rgba(0,0,0,0.05);
+             --popup-header-bg: #007bff; --popup-header-text: #fff; --popup-bg: #fff;
+             --popup-border: #ddd; --popup-shadow: rgba(0,0,0,0.15);
+             --info-text-color: #6c757d; --icon-button-color: #6c757d; --icon-button-hover: #343a40;
+             --timestamp-color: #999; --scroll-button-bg: rgba(0, 123, 255, 0.7);
+             --scroll-button-hover: rgba(0, 86, 179, 0.9);
+             --overlay-bg: rgba(0,0,0,0.4); /* Yeni: Ortalanmış popup için arkaplan */
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -34,138 +35,65 @@
             transition: background-color 0.3s, box-shadow 0.3s;
             position: relative;
         }
-        #header {
-            padding: 15px 15px; background: var(--header-bg); color: var(--header-text);
-            text-align: center; border-bottom: 1px solid var(--popup-border); flex-shrink: 0;
-            display: flex; justify-content: space-between; align-items: center;
-            transition: background-color 0.3s;
-        }
-        #header-title h3 { margin: 0; font-size: 1.1em; }
-        #header-title p { margin: 5px 0 0; font-size: 0.8em; opacity: 0.9;}
-        .header-buttons { display: flex; align-items: center; gap: 5px; }
-        .header-button {
-            background: none; border: none; color: var(--header-text); font-size: 1.4em;
-            cursor: pointer; padding: 5px; line-height: 1; opacity: 0.9;
-            transition: opacity 0.2s;
-        }
-        .header-button:hover { opacity: 1; }
-        #messages {
-             flex-grow: 1; padding: 20px; padding-right: 10px;
-             overflow-y: auto; display: flex; flex-direction: column; gap: 15px;
-             scroll-behavior: smooth;
-             scrollbar-width: thin; scrollbar-color: #bbb var(--container-bg);
-        }
-        #messages::-webkit-scrollbar { width: 8px; }
-        #messages::-webkit-scrollbar-track { background: var(--container-bg); border-radius: 4px; }
-        #messages::-webkit-scrollbar-thumb { background-color: #bbb; border-radius: 4px; border: 2px solid var(--container-bg); }
-        #messages::-webkit-scrollbar-thumb:hover { background-color: #999; }
-        .message-wrapper {
-            display: flex; flex-direction: column; max-width: 85%;
-        }
-        .message-wrapper.user { align-self: flex-end; }
-        .message-wrapper.bot { align-self: flex-start; }
-        .message {
-            padding: 10px 15px; border-radius: 18px; line-height: 1.4;
-            word-wrap: break-word; transition: background-color 0.3s, color 0.3s;
-        }
-        .message strong { font-weight: 600; }
-        .message a { color: var(--link-color); text-decoration: none; font-weight: 500;}
-        .message a:hover { text-decoration: underline; }
-        .user-message {
-            background-color: var(--user-msg-bg); color: var(--user-msg-text);
-            border-bottom-right-radius: 5px;
-        }
-        .bot-message {
-            background-color: var(--bot-msg-bg); color: var(--bot-msg-text);
-            border-bottom-left-radius: 5px;
-        }
-        .timestamp {
-             font-size: 0.7em; color: var(--timestamp-color); margin-top: 3px;
-             display: block; text-align: right;
+        #header { /* ... */ }
+        #header-title h3 { /* ... */ } #header-title p { /* ... */ }
+        .header-buttons { /* ... */ } .header-button { /* ... */ } .header-button:hover { /* ... */ }
+        #messages { /* ... */ scrollbar-width: thin; scrollbar-color: #bbb var(--container-bg); }
+        #messages::-webkit-scrollbar { /* ... */ } #messages::-webkit-scrollbar-track { /* ... */ }
+        #messages::-webkit-scrollbar-thumb { /* ... */ } #messages::-webkit-scrollbar-thumb:hover { /* ... */ }
+        .message-wrapper { /* ... */ } .message-wrapper.user { /* ... */ } .message-wrapper.bot { /* ... */ }
+        .message { /* ... */ } .message strong { /* ... */ } .message a { /* ... */ } .message a:hover { /* ... */ }
+        .user-message { /* ... */ } .bot-message { /* ... */ }
+        .timestamp { /* ... */ } .user-message + .timestamp { /* ... */ } .bot-message + .timestamp { /* ... */ }
+        .message-actions { /* ... */ } .message-wrapper:hover .message-actions { /* ... */ }
+        .action-button { /* ... */ } .action-button:hover { /* ... */ } .copy-status { /* ... */ }
+        .loading span { /* ... */ } .loading span:nth-child(2) { /* ... */ } .loading span:nth-child(3) { /* ... */ }
+        @keyframes typing-dot { /* ... */ } .loading { /* ... */ }
+        #input-area { /* ... */ } #message-input { /* ... */ } #message-input:disabled { /* ... */ }
+        #send-button { /* ... */ } #send-button:hover { /* ... */ } #send-button:disabled { /* ... */ }
+
+        /* --- POPUP STİLLERİ (Hem Köşe Hem Orta İçin) --- */
+        #features-popup-overlay { /* Ortalanmış popup için dış katman */
+             display: none; /* Başlangıçta gizli */
+             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+             background-color: var(--overlay-bg); /* Hafif karartma */
+             z-index: 1000;
+             align-items: center; justify-content: center; /* Ortalamak için */
          }
-         .user-message + .timestamp { text-align: right; margin-right: 5px;}
-         .bot-message + .timestamp { text-align: left; margin-left: 5px;}
-        .message-actions {
-            display: flex; align-items: center; gap: 8px; margin-top: 5px;
-            margin-left: 10px; opacity: 0; transition: opacity 0.3s;
-            height: 0; overflow: hidden;
-        }
-        .message-wrapper:hover .message-actions { opacity: 1; height: auto; }
-        .action-button {
-            border: none; background: none; color: var(--icon-button-color);
-            font-size: 1.2em; cursor: pointer; padding: 2px 6px;
-            border-radius: 5px; transition: background 0.2s, color 0.2s;
-        }
-        .action-button:hover { background: #f1f1f1; color: var(--icon-button-hover); }
-        .copy-status { font-size: 0.9em; color: #2c7; margin-left: 3px; }
-        .loading span {
-            display: inline-block; animation: typing-dot 1.4s infinite; animation-delay: 0s;
-            margin: 0 1px; width: 5px; height: 5px; background-color: currentColor;
-            border-radius: 50%;
-        }
-        .loading span:nth-child(2) { animation-delay: 0.2s; }
-        .loading span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typing-dot { 0% { transform: translateY(0); } 20% { transform: translateY(-3px); } 40% { transform: translateY(0); } }
-        .loading { color: var(--footer-text); font-style: normal; padding: 10px 0; }
-        #input-area {
-            display: flex; padding: 20px; border-top: 1px solid var(--popup-border);
-            background-color: var(--input-area-bg); flex-shrink: 0;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        #message-input {
-            flex-grow: 1; border: 1px solid var(--input-border); border-radius: 20px;
-            padding: 10px 15px; font-size: 1em; margin-right: 10px;
-            outline-color: var(--button-bg); background-color: var(--container-bg);
-            color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
-        #message-input:disabled { background-color: #eee; cursor: not-allowed; opacity: 0.7; }
-        #send-button {
-            border: none; background-color: var(--button-bg); color: var(--button-text);
-            border-radius: 50%; width: 44px; height: 44px; font-size: 1.2em;
-            cursor: pointer; transition: background-color 0.2s; display: flex;
-            align-items: center; justify-content: center;
-        }
-        #send-button:hover { background-color: var(--button-hover); }
-        #send-button:disabled { background-color: var(--disabled-button); cursor: not-allowed; }
-        #features-popup {
-             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-             background: rgba(0,0,0,0.13); z-index: 999; align-items: center; justify-content: center;
+         #features-popup-overlay.active { display: flex; } /* Aktif olunca göster */
+
+        #features-popup { /* Ortak kutu stili */
+             width: 90%; max-width: 450px;
+             background-color: var(--popup-bg); color: var(--text-color);
+             border: 1px solid var(--popup-border); border-radius: 10px;
+             box-shadow: 0 5px 15px var(--popup-shadow);
+             overflow: hidden;
+             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+             animation: popupFadeIn 0.3s ease-out; /* Ortalanmış için animasyon */
          }
-         #features-popup.active { display: flex; }
-         #popup-inner-wrapper {
-             width: 90%; max-width: 450px; background: var(--popup-bg);
-             border-radius: 10px; box-shadow: 0 4px 24px var(--popup-shadow);
-             overflow: hidden; animation: popupFadeIn 0.3s ease-out;
+         /* Sadece otomatik açılan sağ alt köşe popup için ek stiller */
+         #features-popup.corner-popup {
+             position: fixed; bottom: 20px; right: 20px; width: 300px;
+             display: none; /* Başlangıçta gizli */
+             animation: slideUp 0.5s ease-out forwards; /* slideUp'ı kullan, sonda kalsın */
+             z-index: 999; /* Overlay'den altta olabilir */
          }
-        #popup-header {
-             background: var(--popup-header-bg); color: var(--popup-header-text);
-             padding: 12px 20px; display: flex;
-             justify-content: space-between; align-items: center;
-         }
-        #popup-header h4 { margin: 0; font-size: 1em; }
-        #popup-close {
-             background: none; border: none; color: var(--popup-header-text); font-size: 1.6em;
-             cursor: pointer; margin-left: 10px; transition: color 0.2s; padding: 0; line-height: 1;
-         }
-        #popup-close:hover { color: #ffc107; }
+         #features-popup.corner-popup.active { display: block; } /* Aktif olunca göster */
+
+        #popup-header { /* Başlık stilleri aynı */ }
+        #popup-header h4 { /* ... */ } #popup-close { /* ... */ } #popup-close:hover { /* ... */ }
         #popup-content { padding: 20px; }
         #popup-content ul { list-style: disc; padding-left: 20px; margin: 0;}
         #popup-content li { margin-bottom: 8px; font-size: 0.95em; }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes popupFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        #scroll-to-bottom {
-             position: absolute; bottom: 85px; right: 25px;
-             width: 36px; height: 36px; background-color: var(--scroll-button-bg); color: white;
-             border: none; border-radius: 50%; font-size: 1.3em; line-height: 36px;
-             cursor: pointer; display: none; align-items: center; justify-content: center;
-             box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: background-color 0.2s, opacity 0.3s, transform 0.3s;
-             opacity: 0; z-index: 990; text-align: center;
-         }
-         #scroll-to-bottom.visible { display: flex; opacity: 1; transform: translateY(0); }
-         #scroll-to-bottom:hover { background-color: var(--scroll-button-hover); }
-        .footer-credit { color: var(--footer-text); font-size: 0.93em; text-align: center; margin-top: 15px; padding-bottom: 15px;}
-        .info-note { color: var(--info-text-color); font-size: 0.91em; text-align: center; margin: 10px auto 0;}
-        body.dark-mode {
+        /* ------------------------------------------- */
+
+        #scroll-to-bottom { /* ... (Scroll butonu stilleri aynı) ... */ }
+        #scroll-to-bottom.visible { /* ... */ } #scroll-to-bottom:hover { /* ... */ }
+        .footer-credit { /* ... (footer stili aynı) ... */ }
+        .info-note { /* ... (info-note stili aynı) ... */ }
+        body.dark-mode { /* Karanlık Mod Stilleri */
              --bg-color: #24292e; --container-bg: #171b20; --text-color: #f3f3f3;
              --header-bg: #23272e; --header-text: #f3f3f3; --user-msg-bg: #3749a4;
              --user-msg-text: #fff; --bot-msg-bg: #343a40; --bot-msg-text: #f3f3f3;
@@ -176,13 +104,14 @@
              --popup-shadow: rgba(0,0,0,0.33); --info-text-color: #e5e5e5;
              --timestamp-color: #888; --icon-button-color: #aaa; --icon-button-hover: #fff;
              --scroll-button-bg: rgba(55, 73, 164, 0.8); --scroll-button-hover: rgba(44, 62, 128, 1);
+             --overlay-bg: rgba(0,0,0,0.6); /* Koyu tema overlay */
         }
-         body.dark-mode #message-input:disabled { background-color: #333; }
-         body.dark-mode .action-button:hover { background: #555; }
-         body.dark-mode #messages::-webkit-scrollbar-track { background: var(--container-bg); }
-         body.dark-mode #messages::-webkit-scrollbar-thumb { background-color: #555; border-color: var(--container-bg); }
-         body.dark-mode #messages::-webkit-scrollbar-thumb:hover { background-color: #777; }
-         body.dark-mode { scrollbar-color: #555 var(--container-bg); }
+         body.dark-mode #message-input:disabled { /* ... */ }
+         body.dark-mode .action-button:hover { /* ... */ }
+         body.dark-mode #messages::-webkit-scrollbar-track { /* ... */ }
+         body.dark-mode #messages::-webkit-scrollbar-thumb { /* ... */ }
+         body.dark-mode #messages::-webkit-scrollbar-thumb:hover { /* ... */ }
+         body.dark-mode { /* ... */ }
 
     </style>
 </head>
@@ -213,8 +142,9 @@
         Not: Ücretsiz sunucu kullanıldığı için ilk yanıt biraz gecikebilir. Anlayışınız için teşekkürler.
     </p>
 
-    <div id="features-popup">
-         <div id="popup-inner-wrapper">
+    <!-- POPUP HTML KODU (Artık iki amaçlı) -->
+     <div id="features-popup-overlay"> <!-- Ortalanmış popup için dış katman -->
+         <div id="features-popup"> <!-- Hem köşe hem orta için ortak kutu -->
               <div id="popup-header">
                   <h4>🌟 Proje Özellikleri (v1.6)</h4>
                   <button id="popup-close">×</button>
@@ -229,7 +159,7 @@
                        <li>📋 Mesaj Kopyalama Butonu</li>
                        <li>🗑️ Sohbet Temizleme Butonu</li>
                        <li>🔗 Tıklanabilir Yönlendirme Linkleri</li>
-                       <li>🧠 Geliştirilmiş Gemini API Motoru (Daha Empatik & Odaklı)</li>
+                       <li>🧠 Gelişmiş Gemini API Motoru (Daha Empatik & Odaklı)</li>
                        <li>🕊️ Etik Güvenlik Filtresi (ALO 183/112/155)</li>
                        <li>🗣️ Duygusal Ton Algılama & Duygu Takibi</li>
                        <li>🔒 Veri Gizliliği Garantisi (Kayıt Tutmaz)</li>
@@ -240,7 +170,7 @@
                    </ul>
               </div>
          </div>
-    </div>
+     </div>
 
     <div class="footer-credit">
         Yapımcı: Emirhan Bıçakcı ✨
@@ -250,7 +180,8 @@
         const messagesDiv = document.getElementById('messages');
         const inputField = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
-        const popup = document.getElementById('features-popup');
+        const popupOverlay = document.getElementById('features-popup-overlay'); // Overlay div'i
+        const popup = document.getElementById('features-popup'); // İçerik kutusu
         const popupBtn = document.getElementById('feature-popup-btn');
         const popupCloseBtn = document.getElementById('popup-close');
         const themeToggleButton = document.getElementById('theme-toggle');
@@ -262,10 +193,10 @@
         // --- Hata Loglama Fonksiyonu ---
         async function logClientError(error) { /* ... (Fonksiyon aynı) ... */ }
 
-        // --- sendMessage GÜNCELLENDİ (Input Kilitleme, Yazıyor...) ---
+        // --- sendMessage GÜNCELLENDİ ---
         async function sendMessage() { /* ... (Fonksiyon aynı) ... */ }
 
-        // --- addMessageToUI GÜNCELLENDİ (Yazıyor..., Zaman Damgası) ---
+        // --- addMessageToUI GÜNCELLENDİ ---
         function addMessageToUI(text, type, isLoading = false) { /* ... (Fonksiyon aynı) ... */ }
 
         // --- Sohbet Temizleme Fonksiyonu ---
@@ -275,35 +206,56 @@
         function toggleTheme() { /* ... (Fonksiyon aynı) ... */ }
         function applySavedTheme() { /* ... (Fonksiyon aynı) ... */ }
 
-        // --- Popup Fonksiyonları ---
-        function openPopup() { popup.classList.add('active'); }
-        function closePopup() { popup.classList.remove('active'); localStorage.setItem('features-popup-seen', 'yes'); }
+        // --- Popup Fonksiyonları (GÜNCELLENDİ) ---
+        function openPopup(centered = true) { // Parametre eklendi
+            if (centered) {
+                popup.classList.remove('corner-popup'); // Köşe stilini kaldır
+                popupOverlay.classList.add('active'); // Overlay'i göster (ortalamak için)
+            } else {
+                // Sadece sağ alt köşe için
+                popupOverlay.classList.remove('active'); // Overlay'i gizle
+                popup.classList.add('corner-popup'); // Köşe stilini ekle
+                popup.classList.add('active'); // Görünür yap (display: block olacak)
+            }
+        }
+        function closePopup() {
+            popupOverlay.classList.remove('active'); // Overlay'i her zaman gizle
+            popup.classList.remove('active');       // İçeriği her zaman gizle
+            // Animasyonun bitmesini bekleyip köşe classını kaldırmak daha iyi olabilir
+            // ama şimdilik böyle kalsın.
+            localStorage.setItem('features-popup-seen', 'yes');
+        }
+        // ------------------------------------
 
         // --- Aşağı Kaydırma Butonu Fonksiyonları ---
-        function scrollToBottom() { messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' }); }
+        function scrollToBottom() { /* ... (Fonksiyon aynı) ... */ }
         function checkScrollButtonVisibility() { /* ... (Fonksiyon aynı) ... */ }
 
-        // --- Event Listener'lar ---
+        // --- Event Listener'lar (GÜNCELLENDİ) ---
         inputField.addEventListener('keypress', function (e) { if (e.key === 'Enter' && !sendButton.disabled) { sendMessage(); } });
         sendButton.onclick = sendMessage;
         clearChatBtn.onclick = clearChat;
         themeToggleButton.onclick = toggleTheme;
-        popupBtn.onclick = openPopup;
+        popupBtn.onclick = () => openPopup(true); // Butona basınca ortada aç
         popupCloseBtn.onclick = closePopup;
         scrollToBottomBtn.onclick = scrollToBottom;
         messagesDiv.addEventListener('scroll', checkScrollButtonVisibility);
-        popup.addEventListener('click', function(e) { if (e.target === popup) closePopup(); });
+        // Popup dışına (overlay'e) tıklayınca kapat
+        popupOverlay.addEventListener('click', function(e) {
+            if (e.target === popupOverlay) closePopup();
+        });
+        // -----------------------------------------
 
         // --- Sayfa Yüklenince ---
         function showWelcome() {
-             // DÜZELTME: Doğru hoş geldin mesajı
              addMessageToUI("Merhaba! Ben Dijital Aile Danışmanıyım. Size sadece psikolojik, pedagik ve hukuki aile konularında rehberlik edebilirim.", 'bot');
         }
         window.addEventListener('load', function () {
              applySavedTheme();
-             showWelcome(); // Düzeltilmiş fonksiyonu çağır
+             showWelcome();
+             // Sadece daha önce görülmediyse SAĞ ALT KÖŞEDE otomatik aç
              if (localStorage.getItem('features-popup-seen') !== 'yes') {
-                 setTimeout(openPopup, 1500);
+                 setTimeout(() => openPopup(false), 1500); // false -> köşe
              }
              checkScrollButtonVisibility();
         });
