@@ -19,6 +19,7 @@
             --timestamp-color: #999; --scroll-button-bg: rgba(0, 123, 255, 0.7);
             --scroll-button-hover: rgba(0, 86, 179, 0.9);
             --overlay-bg: rgba(0,0,0,0.4);
+            --details-summary-hover: #eee;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -33,11 +34,11 @@
             box-shadow: 0 4px 12px var(--shadow-color); display: flex;
             flex-direction: column; overflow: hidden; margin-bottom: 10px;
             transition: background-color 0.3s, box-shadow 0.3s;
-            position: relative; /* Kaydırma butonu için */
+            position: relative;
         }
         #header {
             padding: 15px 15px; background: var(--header-bg); color: var(--header-text);
-            text-align: center; border-bottom: 1px solid var(--popup-border); flex-shrink: 0;
+            text-align: center; border-bottom: 1px solid var(--popup-border, #ddd); flex-shrink: 0;
             display: flex; justify-content: space-between; align-items: center;
             transition: background-color 0.3s;
         }
@@ -51,8 +52,7 @@
         }
         .header-button:hover { opacity: 1; }
         #messages {
-             flex-grow: 1; /* Bu satır içeriğin görünmesini sağlar */
-             padding: 20px; padding-right: 10px;
+             flex-grow: 1; padding: 20px; padding-right: 10px;
              overflow-y: auto; display: flex; flex-direction: column; gap: 15px;
              scroll-behavior: smooth;
              scrollbar-width: thin; scrollbar-color: #bbb var(--container-bg);
@@ -61,127 +61,78 @@
         #messages::-webkit-scrollbar-track { background: var(--container-bg); border-radius: 4px; }
         #messages::-webkit-scrollbar-thumb { background-color: #bbb; border-radius: 4px; border: 2px solid var(--container-bg); }
         #messages::-webkit-scrollbar-thumb:hover { background-color: #999; }
-        .message-wrapper {
-            display: flex; flex-direction: column; max-width: 85%;
-        }
-        .message-wrapper.user { align-self: flex-end; }
-        .message-wrapper.bot { align-self: flex-start; }
-        .message {
-            padding: 10px 15px; border-radius: 18px; line-height: 1.4;
-            word-wrap: break-word; transition: background-color 0.3s, color 0.3s;
-        }
+        .message-wrapper { display: flex; flex-direction: column; max-width: 85%; }
+        .message-wrapper.user { align-self: flex-end; } .message-wrapper.bot { align-self: flex-start; }
+        .message { padding: 10px 15px; border-radius: 18px; line-height: 1.4; word-wrap: break-word; transition: background-color 0.3s, color 0.3s; }
         .message strong { font-weight: 600; }
         .message a { color: var(--link-color); text-decoration: none; font-weight: 500;}
         .message a:hover { text-decoration: underline; }
-        .user-message {
-            background-color: var(--user-msg-bg); color: var(--user-msg-text);
-            border-bottom-right-radius: 5px;
-        }
-        .bot-message {
-            background-color: var(--bot-msg-bg); color: var(--bot-msg-text);
-            border-bottom-left-radius: 5px;
-        }
-        .timestamp {
-             font-size: 0.7em; color: var(--timestamp-color); margin-top: 3px;
-             display: block; text-align: right;
-         }
-         .user-message + .timestamp { text-align: right; margin-right: 5px;}
-         .bot-message + .timestamp { text-align: left; margin-left: 5px;}
-        .message-actions {
-            display: flex; align-items: center; gap: 8px; margin-top: 5px;
-            margin-left: 10px; opacity: 0; transition: opacity 0.3s;
-            height: 0; overflow: hidden;
-        }
+        .user-message { background-color: var(--user-msg-bg); color: var(--user-msg-text); border-bottom-right-radius: 5px; }
+        .bot-message { background-color: var(--bot-msg-bg); color: var(--bot-msg-text); border-bottom-left-radius: 5px; }
+        .timestamp { font-size: 0.7em; color: var(--timestamp-color); margin-top: 3px; display: block; text-align: right; }
+        .user-message + .timestamp { text-align: right; margin-right: 5px;}
+        .bot-message + .timestamp { text-align: left; margin-left: 5px;}
+        .message-actions { display: flex; align-items: center; gap: 8px; margin-top: 5px; margin-left: 10px; opacity: 0; transition: opacity 0.3s; height: 0; overflow: hidden; }
         .message-wrapper:hover .message-actions { opacity: 1; height: auto; }
-        .action-button {
-            border: none; background: none; color: var(--icon-button-color);
-            font-size: 1.2em; cursor: pointer; padding: 2px 6px;
-            border-radius: 5px; transition: background 0.2s, color 0.2s;
-        }
+        .action-button { border: none; background: none; color: var(--icon-button-color); font-size: 1.2em; cursor: pointer; padding: 2px 6px; border-radius: 5px; transition: background 0.2s, color 0.2s; }
         .action-button:hover { background: #f1f1f1; color: var(--icon-button-hover); }
         .copy-status { font-size: 0.9em; color: #2c7; margin-left: 3px; }
-        .loading span {
-            display: inline-block; animation: typing-dot 1.4s infinite; animation-delay: 0s;
-            margin: 0 1px; width: 5px; height: 5px; background-color: currentColor;
-            border-radius: 50%;
-        }
+        .loading span { display: inline-block; animation: typing-dot 1.4s infinite; animation-delay: 0s; margin: 0 1px; width: 5px; height: 5px; background-color: currentColor; border-radius: 50%; }
         .loading span:nth-child(2) { animation-delay: 0.2s; }
         .loading span:nth-child(3) { animation-delay: 0.4s; }
         @keyframes typing-dot { 0% { transform: translateY(0); } 20% { transform: translateY(-3px); } 40% { transform: translateY(0); } }
         .loading { color: var(--footer-text); font-style: normal; padding: 10px 0; }
-        #input-area {
-            display: flex; padding: 20px; border-top: 1px solid var(--popup-border);
-            background-color: var(--input-area-bg); flex-shrink: 0;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        #message-input {
-            flex-grow: 1; border: 1px solid var(--input-border); border-radius: 20px;
-            padding: 10px 15px; font-size: 1em; margin-right: 10px;
-            outline-color: var(--button-bg); background-color: var(--container-bg);
-            color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
+        #input-area { display: flex; padding: 20px; border-top: 1px solid var(--popup-border, #ddd); background-color: var(--input-area-bg); flex-shrink: 0; transition: background-color 0.3s, border-color 0.3s; }
+        #message-input { flex-grow: 1; border: 1px solid var(--input-border); border-radius: 20px; padding: 10px 15px; font-size: 1em; margin-right: 10px; outline-color: var(--button-bg); background-color: var(--container-bg); color: var(--text-color); transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
         #message-input:disabled { background-color: #eee; cursor: not-allowed; opacity: 0.7; }
-        #send-button {
-            border: none; background-color: var(--button-bg); color: var(--button-text);
-            border-radius: 50%; width: 44px; height: 44px; font-size: 1.2em;
-            cursor: pointer; transition: background-color 0.2s; display: flex;
-            align-items: center; justify-content: center;
-        }
+        #send-button { border: none; background-color: var(--button-bg); color: var(--button-text); border-radius: 50%; width: 44px; height: 44px; font-size: 1.2em; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; }
         #send-button:hover { background-color: var(--button-hover); }
         #send-button:disabled { background-color: var(--disabled-button); cursor: not-allowed; }
-        /* Popup */
+        /* --- POPUP STİLLERİ (Ortalanmış Modal) --- */
          #features-popup-overlay {
              display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
              background-color: var(--overlay-bg); z-index: 1000;
-             align-items: center; justify-content: center;
+             align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;
          }
          #features-popup-overlay.active { display: flex; }
-         #features-popup {
-             width: 90%; max-width: 450px;
+         #features-popup { /* Ortak kutu stili */
+             width: 100%; max-width: 500px;
              background-color: var(--popup-bg); color: var(--text-color);
              border: 1px solid var(--popup-border); border-radius: 10px;
              box-shadow: 0 5px 15px var(--popup-shadow); overflow: hidden;
              transition: background-color 0.3s, color 0.3s, border-color 0.3s;
              animation: popupFadeIn 0.3s ease-out;
-             /* Köşe popup stilleri artık doğrudan uygulanacak */
-             position: absolute; /* Varsayılanı absolute, overlay içinde ortalanacak */
-             bottom: auto; right: auto; /* Köşe konumlandırmayı sıfırla */
+             max-height: 80vh; display: flex; flex-direction: column;
          }
-         #features-popup.corner-popup {
-             position: fixed; bottom: 20px; right: 20px; width: 300px;
-             display: none; /* JS ile active olacak */
-             animation: slideUp 0.5s ease-out forwards;
-             z-index: 999; /* Overlay'den altta olabilir */
-         }
-         #features-popup.corner-popup.active { display: block; }
          #popup-header {
              background: var(--popup-header-bg); color: var(--popup-header-text);
-             padding: 12px 20px; display: flex;
+             padding: 12px 20px; display: flex; flex-shrink: 0;
              justify-content: space-between; align-items: center;
-             border-radius: 10px 10px 0 0; /* Ortalanmış popup için de geçerli */
+             border-bottom: 1px solid var(--popup-border);
          }
-         #popup-header h4 { margin: 0; font-size: 1em; }
+         #popup-header h4 { margin: 0; font-size: 1.1em; }
          #popup-close {
              background: none; border: none; color: var(--popup-header-text); font-size: 1.6em;
              cursor: pointer; margin-left: 10px; transition: color 0.2s; padding: 0; line-height: 1;
          }
          #popup-close:hover { color: #ffc107; }
-         #popup-content { padding: 20px; border-radius: 0 0 10px 10px; } /* Ortalanmış popup için */
-         #popup-content ul { list-style: disc; padding-left: 20px; margin: 0;}
-         #popup-content li { margin-bottom: 8px; font-size: 0.95em; }
-         @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+         #popup-content { padding: 20px; overflow-y: auto; flex-grow: 1; }
+         /* Açılır Kapanır Detay Stilleri */
+         #popup-content details { margin-bottom: 15px; border: 1px solid var(--popup-border); border-radius: 6px; background-color: var(--container-bg); transition: background-color 0.3s; }
+         #popup-content summary { padding: 10px 15px; font-weight: 600; cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; border-radius: 6px 6px 0 0; transition: background-color 0.2s; }
+         #popup-content summary:hover { background-color: var(--details-summary-hover); }
+         #popup-content summary::-webkit-details-marker { display: none; }
+         #popup-content summary::after { content: '▶'; font-size: 0.7em; margin-left: 10px; transition: transform 0.2s ease-out; }
+         #popup-content details[open] > summary { border-bottom: 1px solid var(--popup-border); border-radius: 6px 6px 0 0; }
+         #popup-content details[open] > summary::after { transform: rotate(90deg); }
+         #popup-content .details-content { padding: 15px 15px 15px 30px; }
+         #popup-content .details-content ul { list-style: disc; padding-left: 15px; margin: 0;}
+         #popup-content .details-content li { margin-bottom: 6px; font-size: 0.9em; }
          @keyframes popupFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        #scroll-to-bottom {
-             position: absolute; bottom: 85px; right: 25px;
-             width: 36px; height: 36px; background-color: var(--scroll-button-bg); color: white;
-             border: none; border-radius: 50%; font-size: 1.3em; line-height: 36px;
-             cursor: pointer; display: none; align-items: center; justify-content: center;
-             box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: background-color 0.2s, opacity 0.3s, transform 0.3s;
-             opacity: 0; z-index: 990; text-align: center;
-         }
-         #scroll-to-bottom.visible { display: flex; opacity: 1; transform: translateY(0); }
-         #scroll-to-bottom:hover { background-color: var(--scroll-button-hover); }
+        /* Scroll to Bottom Button */
+        #scroll-to-bottom { position: absolute; bottom: 85px; right: 25px; width: 36px; height: 36px; background-color: var(--scroll-button-bg); color: white; border: none; border-radius: 50%; font-size: 1.3em; line-height: 36px; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: background-color 0.2s, opacity 0.3s, transform 0.3s; opacity: 0; z-index: 990; text-align: center; }
+        #scroll-to-bottom.visible { display: flex; opacity: 1; transform: translateY(0); }
+        #scroll-to-bottom:hover { background-color: var(--scroll-button-hover); }
         .footer-credit { color: var(--footer-text); font-size: 0.93em; text-align: center; margin-top: 15px; padding-bottom: 15px;}
         .info-note { color: var(--info-text-color); font-size: 0.91em; text-align: center; margin: 10px auto 0;}
         body.dark-mode {
@@ -195,7 +146,7 @@
              --popup-shadow: rgba(0,0,0,0.33); --info-text-color: #e5e5e5;
              --timestamp-color: #888; --icon-button-color: #aaa; --icon-button-hover: #fff;
              --scroll-button-bg: rgba(55, 73, 164, 0.8); --scroll-button-hover: rgba(44, 62, 128, 1);
-             --overlay-bg: rgba(0,0,0,0.6);
+             --overlay-bg: rgba(0,0,0,0.6); --details-summary-hover: #2d2d2d;
         }
          body.dark-mode #message-input:disabled { background-color: #333; }
          body.dark-mode .action-button:hover { background: #555; }
@@ -233,31 +184,55 @@
         Not: Ücretsiz sunucu kullanıldığı için ilk yanıt biraz gecikebilir. Anlayışınız için teşekkürler.
     </p>
 
-    <!-- POPUP HTML KODU (v1.6 İçerik) -->
-     <div id="features-popup-overlay"> <!-- Ortalanmış popup için dış katman -->
-         <!-- Popup içeriği buraya JS ile taşınacak veya doğrudan burada kalacak -->
-         <div id="features-popup"> <!-- Hem köşe hem orta için ortak kutu -->
+    <!-- POPUP HTML KODU (Yeni Yapı: Ortalanmış Modal) -->
+     <div id="features-popup-overlay">
+         <div id="features-popup">
               <div id="popup-header">
-                  <h4>🌟 Proje Özellikleri (v1.6)</h4>
+                  <h4>🌟 Proje Özellikleri</h4>
                   <button id="popup-close">×</button>
               </div>
               <div id="popup-content">
-                   <ul>
-                       <li>🎨 Karanlık Mod Desteği</li>
-                       <li>💬 **"Yazıyor..."** Animasyonu</li>
-                       <li>🕒 **Mesaj Zaman Damgaları**</li>
-                       <li>🖱️ **Aşağı Kaydırma Butonu**</li>
-                       <li>📋 Mesaj Kopyalama Butonu</li>
-                       <li>🗑️ Sohbet Temizleme Butonu</li>
-                       <li>🔗 Tıklanabilir Yönlendirme Linkleri</li>
-                       <li>🧠 Gelişmiş Gemini API Motoru (Daha Empatik & Odaklı)</li>
-                       <li>🕊️ Etik Güvenlik Filtresi (ALO 183/112/155)</li>
-                       <li>🗣️ Duygusal Ton Algılama & Duygu Takibi</li>
-                       <li>🔒 Veri Gizliliği Garantisi (Kayıt Tutmaz)</li>
-                       <li>🧩 Spesifik Uzman Yönlendirme</li>
-                       <li>📝 Kalın Yazı & Paragraf Desteği</li>
-                       <li>📊 Aile İstatistik Panosu (Gelecek Özellik)</li>
-                   </ul>
+                  <!-- Açılır Kapanır Sürüm Detayları -->
+                  <details open>
+                      <summary>v1.6 Güncellemeleri</summary>
+                      <div class="details-content">
+                          <ul>
+                              <li>💬 "Yazıyor..." Animasyonu</li>
+                              <li>🕒 Mesaj Zaman Damgaları</li>
+                              <li>🖱️ Aşağı Kaydırma Butonu</li>
+                              <li>🔒 Mesaj Gönderirken Alan Kilitleme</li>
+                              <li>🛠️ İstemci Hata Kayıt Sistemi (Admin İçin)</li>
+                          </ul>
+                      </div>
+                  </details>
+
+                  <details>
+                      <summary>v1.3 - v1.5 Temel Özellikler</summary>
+                      <div class="details-content">
+                          <ul>
+                              <li>🎨 Karanlık Mod Desteği</li>
+                              <li>📋 Mesaj Kopyalama Butonu</li>
+                              <li>🗑️ Sohbet Temizleme Butonu</li>
+                              <li>🔗 Tıklanabilir Yönlendirme Linkleri</li>
+                              <li>🧠 Geliştirilmiş Gemini API Motoru (Daha Empatik & Odaklı)</li>
+                              <li>🕊️ Etik Güvenlik Filtresi (ALO 183/112/155)</li>
+                              <li>🗣️ Duygusal Ton Algılama & Duygu Takibi</li>
+                              <li>🔒 Veri Gizliliği Garantisi (Kayıt Tutmaz)</li>
+                              <li>🧩 Spesifik Uzman Yönlendirme</li>
+                              <li>📝 Kalın Yazı & Paragraf Desteği</li>
+                          </ul>
+                      </div>
+                  </details>
+
+                   <details>
+                      <summary>Gelecek Özellikler</summary>
+                      <div class="details-content">
+                          <ul>
+                               <li>📊 Aile İstatistik Panosu</li>
+                               <li>💾 Sohbeti Kaydetme/Dışa Aktarma</li>
+                          </ul>
+                      </div>
+                  </details>
               </div>
          </div>
      </div>
@@ -267,6 +242,7 @@
     </div>
 
     <script>
+        // --- Değişken Tanımlamaları ---
         const messagesDiv = document.getElementById('messages');
         const inputField = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
@@ -284,14 +260,12 @@
         async function logClientError(error) {
              console.error('İstemci Hatası:', error);
              try {
-                 await fetch(ERROR_LOG_URL, {
-                     method: 'POST', headers: {'Content-Type': 'application/json'},
-                     body: JSON.stringify({ message: error.message || 'Bilinmeyen istemci hatası', details: error.stack || error.toString() })
-                 });
+                 await fetch(ERROR_LOG_URL, { method: 'POST', headers: {'Content-Type': 'application/json'},
+                     body: JSON.stringify({ message: error.message || 'Bilinmeyen istemci hatası', details: error.stack || error.toString() }) });
              } catch (logError) { console.error('Hata loglanırken hata oluştu:', logError); }
         }
 
-        // --- sendMessage ---
+        // --- Mesaj Gönderme Fonksiyonu ---
         async function sendMessage() {
              const messageText = inputField.value.trim();
              if (messageText === '' || sendButton.disabled) return;
@@ -320,13 +294,13 @@
              }
         }
 
-        // --- addMessageToUI ---
-        function addMessageToUI(text, type, isLoading = false) {
+        // --- Mesajları Arayüze Ekleme Fonksiyonu ---
+        function addMessageToUI(text, type, isLoading = false, elementId = null) {
              const wrapperDiv = document.createElement('div');
              wrapperDiv.className = `message-wrapper ${type}`;
+             if (elementId) { wrapperDiv.id = elementId; }
              const messageDiv = document.createElement('div');
              messageDiv.className = `message ${type}-message`;
-
              if (isLoading) {
                  messageDiv.classList.add('loading');
                  messageDiv.innerHTML = '<span></span><span></span><span></span>';
@@ -338,13 +312,13 @@
                  safeText = safeText.replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+|tel:[^\s\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
                  messageDiv.innerHTML = safeText;
                  wrapperDiv.appendChild(messageDiv);
-
-                 const timestampSpan = document.createElement('span');
-                 timestampSpan.className = 'timestamp';
-                 timestampSpan.textContent = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
-                 wrapperDiv.appendChild(timestampSpan);
-
-                 if (type === 'bot') {
+                 if (elementId !== 'chat-updates-section') {
+                     const timestampSpan = document.createElement('span');
+                     timestampSpan.className = 'timestamp';
+                     timestampSpan.textContent = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                     wrapperDiv.appendChild(timestampSpan);
+                 }
+                 if (type === 'bot' && elementId !== 'chat-updates-section') {
                      const actionsDiv = document.createElement('div'); actionsDiv.className = 'message-actions';
                      const copyButton = document.createElement('button'); copyButton.className = 'action-button copy-button';
                      copyButton.innerHTML = '📋 <span class="copy-status"></span>'; copyButton.title = 'Mesajı Kopyala';
@@ -361,7 +335,7 @@
              return wrapperDiv;
         }
 
-        // --- Diğer Fonksiyonlar ---
+        // --- Diğer Yardımcı Fonksiyonlar ---
         function clearChat() { messagesDiv.innerHTML = ''; showWelcome(); inputField.focus(); checkScrollButtonVisibility(); }
         function toggleTheme() {
              document.body.classList.toggle('dark-mode');
@@ -373,33 +347,28 @@
              if (theme === 'dark') { document.body.classList.add('dark-mode'); themeToggleButton.textContent = '☀️';
              } else { document.body.classList.remove('dark-mode'); themeToggleButton.textContent = '🌙'; }
         }
-        function openPopup(centered = true) {
-             if (centered) {
-                 popup.classList.remove('corner-popup'); popupOverlay.classList.add('active');
-             } else {
-                 popupOverlay.classList.remove('active'); popup.classList.add('corner-popup'); popup.classList.add('active');
-             }
-         }
-        function closePopup() { popupOverlay.classList.remove('active'); popup.classList.remove('active'); popup.classList.remove('corner-popup'); /* Köşe classını da temizle */ localStorage.setItem('features-popup-seen', 'yes'); }
+        function openPopup() { popupOverlay.classList.add('active'); }
+        function closePopup() { popupOverlay.classList.remove('active'); }
         function scrollToBottom() { messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' }); }
         function checkScrollButtonVisibility() { const isScrolledUp = messagesDiv.scrollTop < (messagesDiv.scrollHeight - messagesDiv.clientHeight - 50); if (isScrolledUp && messagesDiv.scrollHeight > messagesDiv.clientHeight) { scrollToBottomBtn.classList.add('visible'); } else { scrollToBottomBtn.classList.remove('visible'); } }
 
-        // --- Event Listener'lar ---
+        // --- Event Listener Atamaları ---
         inputField.addEventListener('keypress', function (e) { if (e.key === 'Enter' && !sendButton.disabled) { sendMessage(); } });
         sendButton.onclick = sendMessage;
         clearChatBtn.onclick = clearChat;
         themeToggleButton.onclick = toggleTheme;
-        popupBtn.onclick = () => openPopup(true);
+        popupBtn.onclick = openPopup;
         popupCloseBtn.onclick = closePopup;
         scrollToBottomBtn.onclick = scrollToBottom;
         messagesDiv.addEventListener('scroll', checkScrollButtonVisibility);
         popupOverlay.addEventListener('click', function(e) { if (e.target === popupOverlay) closePopup(); });
 
-        // --- Sayfa Yüklenince ---
+        // --- Sayfa Yüklenince Çalışacak Kodlar ---
         function showWelcome() { addMessageToUI("Merhaba! Ben Dijital Aile Danışmanıyım. Size sadece psikolojik, pedagik ve hukuki aile konularında rehberlik edebilirim.", 'bot'); }
         window.addEventListener('load', function () {
-             applySavedTheme(); showWelcome();
-             if (localStorage.getItem('features-popup-seen') !== 'yes') { setTimeout(() => openPopup(false), 1500); }
+             applySavedTheme();
+             showWelcome();
+             // Otomatik popup açılışı yok
              checkScrollButtonVisibility();
         });
 
@@ -410,5 +379,4 @@
     </script>
 </body>
 </html>
-
 
