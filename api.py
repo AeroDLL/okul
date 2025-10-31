@@ -1,7 +1,7 @@
 # --- api.py ---
-# SON GÜNCELLEME: 29 Ekim 2025 (v1.6 - İstemci Hata Loglama Dahil)
-# Özellikler: Doğal Konuşma, Acil Numaraları Direkt Aratma, Spesifik Kaynak Önerileri,
-#            Konu Kısıtlama, Empatik Dinleme & Duygu Takibi, Sunucu Loglama, İstemci Hata Loglama
+# SON GÜNCELLEME: 1 Kasım 2025 (v1.6 - Hafızalı Sohbet ve Akıllı Talimatlar)
+# Özellikler: Konuşma Geçmişini Hatırlama (Hafıza), Acil Durum Takibi, Doğal Kısa Mesaj Yanıtları,
+#            Loglama, Hata Kaydı, Acil Arama, Spesifik Yönlendirme...
 
 import os
 import google.generativeai as genai
@@ -20,7 +20,7 @@ try:
 except Exception as e:
     raise ConnectionError(f"Google API bağlantısı kurulamadı: {e}")
 
-# 3. Modelin Karakterini (Sistem Talimatı) - NIHAI SÜRÜM v1.3
+# 3. Modelin Karakterini (Sistem Talimatı) - AKILLI VE HAFIZALI SÜRÜM
 PROJE_TALIMATI = """
 **SENİN KİMLİĞİN VE AMACIN:**
 Sen, **'Dijital Aile Danışmanı'** adlı bir yapay zekâ destekli sohbet botusun. Amacın, ailelerin veya bireylerin yaşadığı **psikolojik, pedagojik (çocuk/eğitim) veya hukuki aile sorunlarında** onlara **ilk aşamada rehberlik etmek**, onları dinlemek ve **doğru yerlere yönlendirmektir**. Konuşma tarzın **sıcak, empatik, anlayışlı ve mümkün olduğunca doğal, bir arkadaş gibi** olmalı. Robot gibi konuşmaktan kaçın.
@@ -77,10 +77,32 @@ Sen, **'Dijital Aile Danışmanı'** adlı bir yapay zekâ destekli sohbet botus
 try:
     model = genai.GenerativeModel(
         model_name="gemini-2.5-flash", # VEYA "gemini-1.0-pro"
-        system_instruction=PROJE_TALIMATI
+        # DİKKAT: system_instruction buradan kaldırıldı,
+        # çünkü sohbeti başlatırken talimatları history'ye ekleyeceğiz.
     )
 except Exception as e:
     raise ValueError(f"Google Modeli başlatılamadı: {e}")
+
+# --- YENİ: SOHBET OTURUMUNU (CHAT) BAŞLATMA ---
+# Botu, talimatlarımızla "hazırla" (prime)
+# Bu, botun hafızasını (konuşma geçmişini) tutmasını sağlar
+chat_history = [
+    {
+        "role": "user",
+        "parts": ["Sohbet başlıyor. Lütfen talimatlara uy."] # Başlangıç için sahte bir kullanıcı girdisi
+    },
+    {
+        "role": "model",
+        "parts": [PROJE_TALIMATI] # Botun talimatları
+    }
+]
+
+# Sohbeti bu geçmişle başlat
+try:
+    chat = model.start_chat(history=chat_history)
+except Exception as e:
+    raise RuntimeError(f"Sohbet oturumu (start_chat) başlatılamadı: {e}")
+# ---------------------------------------------
 
 app = Flask(__name__)
 CORS(app)
@@ -88,16 +110,12 @@ CORS(app)
 # --- LOG FORMATINI AYARLA ---
 log_format = "[DANISMAN_BOT] [%(levelname)s] %(message)s"
 formatter = logging.Formatter(log_format)
-# Flask'ın varsayılan logger'ı stderr'e yazar, Render bunu yakalar.
-# Eğer birden fazla handler varsa, sadece ilkine formatı uygulayalım
 if app.logger.hasHandlers():
     app.logger.handlers[0].setFormatter(formatter)
 else:
-    # Güvenlik için, eğer handler yoksa bir tane ekleyelim
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
     app.logger.addHandler(handler)
-
 app.logger.setLevel(logging.INFO)
 # ----------------------------------
 
@@ -118,31 +136,28 @@ def handle_mesaj():
 
         app.logger.info(f"USER >> {kullanici_mesaji}")
 
-        response = model.generate_content(kullanici_mesaji)
+        # --- GÜNCELLENDİ: Artık 'chat' oturumunu kullanıyoruz ---
+        response = chat.send_message(kullanici_mesaji)
+        # ----------------------------------------------------
 
         try:
-            # Cevabı alırken güvenlik bloklamasını kontrol et
             if not response.parts:
                  bot_cevabi = "[Model güvenlik nedeniyle veya başka bir sebeple cevap vermedi]"
-                 # Güvenlik geri bildirimini logla (varsa)
                  feedback_reason = "Bilinmiyor"
-                 try:
-                     feedback_reason = response.prompt_feedback.block_reason
-                 except Exception:
-                     pass # Geri bildirim yoksa devam et
+                 try: feedback_reason = response.prompt_feedback.block_reason
+                 except Exception: pass
                  app.logger.warning(f"Model boş cevap döndü (/api/mesaj). Sebep: {feedback_reason}")
             else:
                  bot_cevabi = response.text
-        except ValueError as ve: # İçerik güvenlik politikaları nedeniyle engellendiğinde bu hata oluşur
+        except ValueError as ve:
             bot_cevabi = "[Üzgünüm, bu konudaki isteğinizi güvenlik politikalarımız nedeniyle işleyemiyorum.]"
             app.logger.warning(f"Model (ValueError) güvenlik nedeniyle cevap vermedi (/api/mesaj): {ve}")
         except AttributeError:
              bot_cevabi = "[Cevap formatı beklenenden farklı (/api/mesaj)]"
              app.logger.warning("Model cevabının formatı beklenenden farklı (/api/mesaj).")
         except Exception as inner_e:
-             bot_cevabi = "[Modelden cevap alınırken bir hata oluştu (/api/mesaj)]"
-             app.logger.error(f"model.generate_content sonrası hata (/api/mesaj): {inner_e}")
-
+             bot_cevabi = "[Modelden cevap alınırken bir hata oluştu (/api/masaj)]"
+             app.logger.error(f"model.send_message sonrası hata (/api/mesaj): {inner_e}")
 
         log_bot_cevabi = bot_cevabi.replace('\n', '\n[DANISMAN_BOT] [INFO]       ')
         app.logger.info(f"BOT <<\n[DANISMAN_BOT] [INFO]       {log_bot_cevabi}")
@@ -159,8 +174,7 @@ def handle_mesaj():
 def log_client_error():
     try:
         error_data = request.get_json()
-        # Düzeltme: 'error' yerine 'message' kontrolü
-        if error_data and 'message' in error_data:
+        if error_data and 'message' in error_data: # 'error' yerine 'message' kontrolü
             app.logger.error(f"[CLIENT_ERROR] Tarayıcı Hatası: {error_data.get('message', 'Mesaj yok')} | Detay: {error_data.get('details', 'Detay yok')}")
             return jsonify({"status": "error logged"}), 200
         else:
@@ -172,7 +186,5 @@ def log_client_error():
 
 # Bu kısım sadece 'python api.py' ile çalıştırıldığında kullanılır.
 if __name__ == '__main__':
-    # Render'da Gunicorn kullanıldığı için debug=True/False fark etmez ama yerelde False yapalım
     app.run(debug=False, port=int(os.environ.get("PORT", 5000)), host='0.0.0.0')
-
 
