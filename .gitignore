@@ -1,0 +1,14 @@
+Python gereksiz dosyaları
+
+pycache/
+*.py[cod]
+*$py.class
+
+Sanal ortam
+
+venv/
+env/
+
+GİZLİ DOSYALAR (Bunları sakın silme)
+
+.env
